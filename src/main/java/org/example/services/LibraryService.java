@@ -1,9 +1,20 @@
 package org.example.services;
 
 import org.example.models.Book;
+import org.example.models.Library;
 import org.example.models.Reader;
 
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class LibraryService {
+    Library library;
+
+    public LibraryService(Library library) {
+        this.library = library;
+    }
+
     public void loanBook(Book book, Reader reader) {
         if (!book.isLoaned()) {
             book.setLoaned(true);
@@ -15,12 +26,35 @@ public class LibraryService {
     }
 
     public void returnBook(Book book, Reader reader) {
-        if (book.isLoaned()) {
+        if (book.isLoaned() && reader.getBorrowedBooks().contains(book)) {
             book.setLoaned(false);
             reader.removeBook(book);
             System.out.println(reader.getName() + " vrátil knihu " + book.getTitle());
         } else {
             System.out.println("Čtenář neměl danou knihu zapůjčenou!");
         }
+    }
+
+    public Book finBookByTitle(String bookTitle) {
+        for (Book book : library.getBooks()) {
+            if (book.getTitle().equals(bookTitle)) {
+                System.out.println("Knížka: " + book.getTitle());
+                return book;
+            }
+        }
+        return null;
+    }
+
+    public List<Book> finBookByAuthor(String bookAuthor) {
+        return library.getBooks().stream()
+                .filter(book -> book.getAuthor().equals(bookAuthor)).toList();
+    }
+
+    public List<Book> sortByTitle() {
+        return library.getBooks().stream().sorted(Comparator.comparing(Book::getTitle)).toList();
+    }
+
+    public List<Book> sortByAuthor() {
+        return library.getBooks().stream().sorted(Comparator.comparing(Book::getAuthor)).toList();
     }
 }
