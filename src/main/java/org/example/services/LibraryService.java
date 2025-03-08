@@ -4,9 +4,9 @@ import org.example.models.Book;
 import org.example.models.Library;
 import org.example.models.Reader;
 
+import java.io.*;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class LibraryService {
     Library library;
@@ -35,7 +35,7 @@ public class LibraryService {
         }
     }
 
-    public Book finBookByTitle(String bookTitle) {
+    public Book findBookByTitle(String bookTitle) {
         for (Book book : library.getBooks()) {
             if (book.getTitle().equals(bookTitle)) {
                 System.out.println("Knížka: " + book.getTitle());
@@ -45,7 +45,7 @@ public class LibraryService {
         return null;
     }
 
-    public List<Book> finBookByAuthor(String bookAuthor) {
+    public List<Book> findBookByAuthor(String bookAuthor) {
         return library.getBooks().stream()
                 .filter(book -> book.getAuthor().equals(bookAuthor)).toList();
     }
@@ -56,5 +56,29 @@ public class LibraryService {
 
     public List<Book> sortByAuthor() {
         return library.getBooks().stream().sorted(Comparator.comparing(Book::getAuthor)).toList();
+    }
+
+    public void saveLibraryToFile() {
+        File directory = new File("data");
+        if (!directory.exists()) {
+            directory.mkdir(); // Vytvoří složku data pokud neexistuje
+        }
+
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("data/library_data.ser"))) {
+            oos.writeObject(library.getBooks());
+            System.out.println("Knihovna byla v pořádku uložena");
+        } catch (IOException e) {
+            System.out.println("Nastala chyba při ukládání knihovny! " + e.getMessage());
+        }
+    }
+
+    public void loadLibraryFromFile() {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("data/library_data.ser"))) {
+            List<Book> books = (List<Book>) ois.readObject();
+            library.setBooks(books);
+            System.out.println("Knížky byly úspěšně načteny!");
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Nastala chyba při načítání knihovny! " + e.getMessage());
+        }
     }
 }
