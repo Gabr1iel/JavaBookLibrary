@@ -1,17 +1,44 @@
 package org.example;
 
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import org.example.controllers.LibraryController;
 import org.example.models.Book;
 import org.example.models.Library;
 import org.example.models.Reader;
 import org.example.services.LibraryService;
+import org.example.utils.FileHandler;
 
-public class Main {
-    public static void main(String[] args) {
+import java.io.IOException;
+
+public class Main extends Application {
+    @Override
+    public void start(Stage stage) throws IOException {
         Library library = new Library();
         LibraryService libraryService = new LibraryService(library);
-        libraryService.loadLibraryFromFile();
+        FileHandler fileHandler = new FileHandler(library);
+        FXMLLoader fxmlloader = new FXMLLoader(getClass().getResource("/org/example/views/library-view.fxml"));
+        Parent root = fxmlloader.load();
+        System.out.println("FXML načteno: " + (fxmlloader.getLocation() != null));
 
-        Reader reader = new Reader("Emil Debil", "19.4.2001", "U Prdele, Praha");
+        LibraryController controller = fxmlloader.getController();
+        System.out.println("Library: " + library);
+        System.out.println("controller: " + controller);
+        controller.setLibrary(library);
+
+        Scene scene = new Scene(root);
+        stage.setTitle("Library Database");
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public static void main(String[] args) {
+        launch();
+
+        /*Reader reader = new Reader("Emil Debil", "19.4.2001", "U Prdele, Praha");
 
         // Testování základních operací
         libraryService.loanBook(libraryService.findBookByTitle("Farma Zvířat"), reader);
@@ -40,15 +67,15 @@ public class Main {
         }
 
         // Ukládání do souboru
-        libraryService.saveLibraryToFile();
+        fileHandler.saveLibraryToFile();
         library.setBooks(null);
 
-        libraryService.loadLibraryFromFile();
+        fileHandler.loadLibraryFromFile();
 
         System.out.println("Načtené knihy: ");
         for (Book book : library.getBooks()) {
             System.out.println(book.getTitle() + " - " + book.getAuthor());
-        }
+        }*/
 
     }
 }
