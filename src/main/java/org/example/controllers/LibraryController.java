@@ -6,6 +6,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import org.example.models.Book;
 import org.example.models.Library;
+import org.example.services.LibraryService;
 import org.example.utils.FileHandler;
 
 
@@ -14,6 +15,7 @@ import java.util.List;
 public class LibraryController {
     Library library;
     FileHandler fileHandler;
+    LibraryService libraryService;
 
     @FXML private TextField bookTitleField;
     @FXML private TextField bookAuthorField;
@@ -24,6 +26,7 @@ public class LibraryController {
     public void setLibrary(Library library) {
         this.library = library;
         this.fileHandler = new FileHandler(library); // Přidá FileHandler
+        this.libraryService = new LibraryService(library);
         fileHandler.loadLibraryFromFile(); // Načte uložená data
         updateBookList(); // Po nastavení knihovny rovnou načteme knihy
     }
@@ -56,14 +59,24 @@ public class LibraryController {
         }
     }
 
+    @FXML private void handleRemoveBook() {
+        String selectedBook = bookListView.getSelectionModel().getSelectedItem();
+
+        if (selectedBook != null) {
+            Book book = libraryService.findBookByTitle(selectedBook);
+            library.removeBook(book);
+            fileHandler.saveLibraryToFile();
+            updateBookList();
+        }
+    }
+
     @FXML private void handleLoanBook() {
         String selectedBook = bookListView.getSelectionModel().getSelectedItem();
+
         if (selectedBook != null) {
+            System.out.println(selectedBook);
             System.out.println("Book loaned: " + selectedBook);
             bookListView.getItems().remove(selectedBook);
         }
     }
-
-
-
 }

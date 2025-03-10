@@ -14,5 +14,8 @@
         <Button text="Add Book" onAction="#handleAddBook"/>
     </HBox>
     <ListView fx:id="bookListView" prefHeight="200"/>
-    <Button text="Loan Book" onAction="#handleLoanBook"/>
+    <HBox spacing="10">
+        <Button text="Loan Book" onAction="#handleLoanBook"/>
+        <Button text="Remove Book" onAction="#handleRemoveBook"/>
+    </HBox>
 </VBox>

@@ -18,8 +18,6 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         Library library = new Library();
-        LibraryService libraryService = new LibraryService(library);
-        FileHandler fileHandler = new FileHandler(library);
         FXMLLoader fxmlloader = new FXMLLoader(getClass().getResource("/org/example/views/library-view.fxml"));
         Parent root = fxmlloader.load();
         System.out.println("FXML načteno: " + (fxmlloader.getLocation() != null));
