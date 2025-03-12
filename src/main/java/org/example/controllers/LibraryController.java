@@ -24,6 +24,7 @@ public class LibraryController {
     @FXML private TableColumn<Book, String> dateColumn;
     @FXML private Button loanBookButton;
 
+
     public void setLibrary(Library library) {
         this.library = library;
         this.fileHandler = new FileHandler(library); // Přidá FileHandler

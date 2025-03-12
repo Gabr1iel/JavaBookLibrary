@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="org.example.controllers.MainViewController">
+    <left>
+        <VBox spacing="10" style="-fx-background-color: #f0f0f0; -fx-padding: 10;">
+            <Button text="Books" onAction="#loadBooks"/>
+            <Button text="Readers" onAction="#loadReaders"/>
+        </VBox>
+    </left>
+    <center>
+        <StackPane fx:id="contentPane"/>
+    </center>
+</BorderPane>
