@@ -13,6 +13,10 @@
         <TextField fx:id="bookPublishDateField" promptText="Enter publish date"/>
         <Button text="Add Book" onAction="#handleAddBook"/>
     </HBox>
+    <HBox>
+        <TextField fx:id="bookTitleFilterField" promptText="Enter book title"/>
+        <Button text="Search" onAction="#findBook"/>
+    </HBox>
     <ListView fx:id="bookListView" prefHeight="200"/>
     <HBox spacing="10">
         <Button text="Loan Book" onAction="#handleLoanBook"/>

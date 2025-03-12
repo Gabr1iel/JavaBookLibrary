@@ -20,6 +20,7 @@ public class LibraryController {
     @FXML private TextField bookTitleField;
     @FXML private TextField bookAuthorField;
     @FXML private TextField bookPublishDateField;
+    @FXML private TextField bookTitleFilterField;
     @FXML private ListView<String> bookListView;
     @FXML private Button loanBookButton;
 
@@ -48,7 +49,7 @@ public class LibraryController {
         String bookTitle = bookTitleField.getText();
         String bookAuthor = bookAuthorField.getText();
         String bookPublishDate = bookPublishDateField.getText();
-        if (!bookTitle.isEmpty() && !bookAuthor.isEmpty() && !bookPublishDate.isEmpty()) {
+        if (!bookTitle.trim().isEmpty() && !bookAuthor.trim().isEmpty() && !bookPublishDate.trim().isEmpty()) {
             Book newBook = new Book(bookTitle, bookAuthor, bookPublishDate);
             library.addBook(newBook);
             fileHandler.saveLibraryToFile();
@@ -67,6 +68,22 @@ public class LibraryController {
             library.removeBook(book);
             fileHandler.saveLibraryToFile();
             updateBookList();
+        }
+    }
+
+    @FXML private void findBook() {
+        String title = bookTitleFilterField.getText();
+
+        if (title != null && !title.isEmpty() && libraryService.findBookByTitle(title) != null) {
+           Book book = libraryService.findBookByTitle(title);
+           bookListView.getItems().clear();
+           bookListView.getItems().add(book.getTitle());
+           bookTitleField.clear();
+        } else if (title.isEmpty()) {
+            updateBookList();
+        } else {
+            bookListView.getItems().clear();
+            bookListView.getItems().add("Knížka není v databázi!");
         }
     }
 

@@ -18,6 +18,10 @@ public class FileHandler {
         if (!directory.exists()) {
             directory.mkdir(); // Vytvoří složku data pokud neexistuje
         }
+        if (library.getBooks() == null || library.getBooks().isEmpty()) {
+            System.out.println("Knihovna je prázdná!");
+            return;
+        }
 
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("data/library_data.ser"))) {
             oos.writeObject(library.getBooks());
