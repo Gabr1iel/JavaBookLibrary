@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
@@ -6,7 +8,7 @@
 
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TableColumn?>
-<VBox spacing="10" alignment="CENTER" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.controllers.LibraryController">
+<VBox spacing="10" alignment="CENTER" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.controllers.BooksController">
     <Label text="Library Database" style="-fx-font-size: 24px;"/>
     <HBox spacing="10">
         <TextField fx:id="bookTitleField" promptText="Enter book title"/>
@@ -23,6 +25,7 @@
                 <TableColumn fx:id="titleColumn" text="Title"/>
                 <TableColumn fx:id="authorColumn" text="Author"/>
                 <TableColumn fx:id="dateColumn" text="Publish Date"/>
+                <TableColumn fx:id="loanedColumn" text="Avilability"/>
         </columns>
     </TableView>
     <HBox spacing="10">

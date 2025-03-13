@@ -1,5 +1,6 @@
 package org.example.controllers;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -9,7 +10,7 @@ import org.example.models.Library;
 import org.example.services.LibraryService;
 import org.example.utils.FileHandler;
 
-public class LibraryController {
+public class BooksController {
     Library library;
     FileHandler fileHandler;
     LibraryService libraryService;
@@ -22,6 +23,7 @@ public class LibraryController {
     @FXML private TableColumn<Book, String> titleColumn;
     @FXML private TableColumn<Book, String> authorColumn;
     @FXML private TableColumn<Book, String> dateColumn;
+    @FXML private TableColumn<Book, String> loanedColumn;
     @FXML private Button loanBookButton;
 
 
@@ -37,6 +39,23 @@ public class LibraryController {
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         authorColumn.setCellValueFactory(new PropertyValueFactory<>("author"));
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("releaseDate"));
+        loanedColumn.setCellFactory(cellData -> new TableCell<Book, String>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if(empty || getTableRow() == null || getTableRow().getItem() == null) {
+                    setText(null);
+                } else {
+                    Book book = getTableRow().getItem();
+                    if (book.isLoaned()) {
+                        setText("Loaned");
+                    } else {
+                        setText("Avilable");
+                    }
+                }
+            }
+        });
 
         bookTableView.setItems(FXCollections.observableArrayList(library.getBooks()));
     }
@@ -77,6 +96,7 @@ public class LibraryController {
            Book book = libraryService.findBookByTitle(title);
            bookTableView.getItems().clear();
            bookTableView.getItems().add(book);
+           System.out.println("Book loan status " + book.isLoaned());
            bookTitleField.clear();
         } else if (title.isEmpty()) {
             updateBookList();
