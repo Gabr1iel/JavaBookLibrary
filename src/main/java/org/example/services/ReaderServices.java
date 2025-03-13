@@ -1,4 +1,4 @@
 package org.example.services;
 
-public class ReaderService {
+public class ReaderServices {
 }

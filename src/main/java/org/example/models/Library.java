@@ -1,28 +1,17 @@
 package org.example.models;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.example.services.BookServices;
+import org.example.services.ReaderServices;
 
 public class Library {
-    private List<Book> books;
+    private final BookServices bookServices = new BookServices();
+    private final ReaderServices readerServices = new ReaderServices();
 
-    public Library() {
-        books = new ArrayList<>();
+    public BookServices getBookServices() {
+        return bookServices;
     }
 
-    public void addBook(Book book) {
-        books.add(book);
-    }
-
-    public void removeBook(Book book) {
-        books.remove(book);
-    }
-
-    public List<Book> getBooks() {
-        return books;
-    }
-
-    public void setBooks(List<Book> books) {
-        this.books = books;
+    public ReaderServices getReaderServices() {
+        return readerServices;
     }
 }

@@ -1,17 +1,33 @@
 package org.example.services;
 
 import org.example.models.Book;
-import org.example.models.Library;
 import org.example.models.Reader;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class LibraryService {
-    Library library;
+public class BookServices {
+    private List<Book> books;
 
-    public LibraryService(Library library) {
-        this.library = library;
+    public BookServices() {
+        books = new ArrayList<>();
+    }
+
+    public void addBook(Book book) {
+        books.add(book);
+    }
+
+    public void removeBook(Book book) {
+        books.remove(book);
+    }
+
+    public List<Book> getBooks() {
+        return books;
+    }
+
+    public void setBooks(List<Book> books) {
+        this.books = books;
     }
 
     public void loanBook(Book book, Reader reader) {
@@ -35,7 +51,7 @@ public class LibraryService {
     }
 
     public Book findBookByTitle(String bookTitle) {
-        for (Book book : library.getBooks()) {
+        for (Book book : getBooks()) {
             if (book.getTitle().equals(bookTitle)) {
                 System.out.println("Knížka: " + book.getTitle());
                 return book;
@@ -45,15 +61,15 @@ public class LibraryService {
     }
 
     public List<Book> findBookByAuthor(String bookAuthor) {
-        return library.getBooks().stream()
+        return getBooks().stream()
                 .filter(book -> book.getAuthor().equals(bookAuthor)).toList();
     }
 
     public List<Book> sortByTitle() {
-        return library.getBooks().stream().sorted(Comparator.comparing(Book::getTitle)).toList();
+        return getBooks().stream().sorted(Comparator.comparing(Book::getTitle)).toList();
     }
 
     public List<Book> sortByAuthor() {
-        return library.getBooks().stream().sorted(Comparator.comparing(Book::getAuthor)).toList();
+        return getBooks().stream().sorted(Comparator.comparing(Book::getAuthor)).toList();
     }
 }

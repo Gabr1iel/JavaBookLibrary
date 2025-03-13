@@ -1,19 +1,18 @@
 package org.example.controllers;
 
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.example.models.Book;
 import org.example.models.Library;
-import org.example.services.LibraryService;
+import org.example.services.BookServices;
 import org.example.utils.FileHandler;
 
 public class BooksController {
     Library library;
     FileHandler fileHandler;
-    LibraryService libraryService;
+    BookServices bookServices;
 
     @FXML private TextField bookTitleField;
     @FXML private TextField bookAuthorField;
@@ -24,14 +23,13 @@ public class BooksController {
     @FXML private TableColumn<Book, String> authorColumn;
     @FXML private TableColumn<Book, String> dateColumn;
     @FXML private TableColumn<Book, String> loanedColumn;
-    @FXML private Button loanBookButton;
 
 
-    public void setLibrary(Library library) {
+    public void setBooksFromLibrary(Library library) {
         this.library = library;
         this.fileHandler = new FileHandler(library); // Přidá FileHandler
-        this.libraryService = new LibraryService(library);
-        fileHandler.loadLibraryFromFile(); // Načte uložená data
+        this.bookServices = library.getBookServices();
+        fileHandler.loadBooksFromFile(); // Načte uložená data
         updateBookList(); // Po nastavení knihovny rovnou načteme knihy
     }
 
@@ -57,7 +55,7 @@ public class BooksController {
             }
         });
 
-        bookTableView.setItems(FXCollections.observableArrayList(library.getBooks()));
+        bookTableView.setItems(FXCollections.observableArrayList(library.getBookServices().getBooks()));
     }
 
     @FXML public void initialize() {
@@ -70,8 +68,8 @@ public class BooksController {
         String bookPublishDate = bookPublishDateField.getText();
         if (!bookTitle.trim().isEmpty() && !bookAuthor.trim().isEmpty() && !bookPublishDate.trim().isEmpty()) {
             Book newBook = new Book(bookTitle, bookAuthor, bookPublishDate);
-            library.addBook(newBook);
-            fileHandler.saveLibraryToFile();
+            library.getBookServices().addBook(newBook);
+            fileHandler.saveBooksToFile();
             updateBookList();
             bookTitleField.clear();
             bookAuthorField.clear();
@@ -83,8 +81,8 @@ public class BooksController {
         Book selectedBook = bookTableView.getSelectionModel().getSelectedItem();
 
         if (selectedBook != null) {
-            library.removeBook(selectedBook);
-            fileHandler.saveLibraryToFile();
+            library.getBookServices().removeBook(selectedBook);
+            fileHandler.saveBooksToFile();
             updateBookList();
         }
     }
@@ -92,8 +90,8 @@ public class BooksController {
     @FXML private void findBook() {
         String title = bookTitleFilterField.getText();
 
-        if (title != null && !title.isEmpty() && libraryService.findBookByTitle(title) != null) {
-           Book book = libraryService.findBookByTitle(title);
+        if (title != null && !title.isEmpty() && bookServices.findBookByTitle(title) != null) {
+           Book book = bookServices.findBookByTitle(title);
            bookTableView.getItems().clear();
            bookTableView.getItems().add(book);
            System.out.println("Book loan status " + book.isLoaned());
