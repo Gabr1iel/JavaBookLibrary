@@ -28,9 +28,12 @@
             <TableColumn fx:id="addressTableCol" text="Address"/>
             <TableColumn fx:id="bDateTableCol" text="Birth Date"/>
             <TableColumn fx:id="loanedBooksTableCol" text="Loaned Books"/>
+            <TableColumn>
+            </TableColumn>
         </columns>
     </TableView>
     <HBox spacing="10">
+        <Button fx:id="loanBookBtn" text="Loan book" onAction="#handleLoanBook"/>
         <Button fx:id="removeReaderBtn" onAction="#removeReader" text="Remove"/>
     </HBox>
 </VBox>

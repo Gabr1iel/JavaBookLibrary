@@ -1,5 +1,6 @@
 package org.example.services;
 
+import org.example.models.Book;
 import org.example.models.Reader;
 
 import java.util.ArrayList;
@@ -26,6 +27,13 @@ public class ReaderServices {
 
     public void setReaders(List<Reader> readers) {
         this.readers = readers;
+    }
+
+    public void loanBook(Book book, Reader reader) {
+        if (book != null) {
+            reader.addBook(book);
+            book.borrowBook();
+        }
     }
 
     public Reader findReaderByName(String name) {

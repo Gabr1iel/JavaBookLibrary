@@ -2,14 +2,17 @@ package org.example.controllers;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import org.example.models.Book;
 import org.example.models.Library;
 import org.example.models.Reader;
 import org.example.services.ReaderServices;
 import org.example.utils.FileHandler;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class ReadersController {
     Library library;
@@ -23,6 +26,7 @@ public class ReadersController {
     @FXML private TableColumn<Reader, String> nameTableCol;
     @FXML private TableColumn<Reader, String> bDateTableCol;
     @FXML private TableColumn<Reader, String> addressTableCol;
+    @FXML private TableColumn<Reader, List<Book>> loanedBooksTableCol;
 
 
     public void setReadersFromLibrary(Library library, FileHandler fileHandler) {
@@ -37,6 +41,8 @@ public class ReadersController {
         nameTableCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         bDateTableCol.setCellValueFactory(new PropertyValueFactory<>("birthDate"));
         addressTableCol.setCellValueFactory(new PropertyValueFactory<>("address"));
+        loanedBooksTableCol.setCellValueFactory(new PropertyValueFactory<>("borrowedBooks"));
+        loanedBooksTableCol.setCellFactory(column -> new BorrowedBooksCell());
 
         readerTable.setItems(FXCollections.observableArrayList(readerServices.getReaders()));
     }
@@ -78,6 +84,62 @@ public class ReadersController {
             updateReadersList();
         } else {
             readerTable.getItems().clear();
+        }
+    }
+
+    @FXML public void handleLoanBook() {
+        Reader reader = readerTable.getSelectionModel().getSelectedItem();
+        if (reader == null) {
+            System.out.println("No reader selected");
+            return;
+        }
+
+        List<Book> avilableBooks = library.getBookServices().getAvilableBooks();
+        List<String> booksTitle = avilableBooks.stream().map(Book::getTitle).toList();
+        if (avilableBooks.isEmpty()) {
+            System.out.println("No available books");
+            return;
+        }
+
+        ChoiceDialog<String> dialog = new ChoiceDialog<>(booksTitle.get(0), booksTitle);
+        dialog.setTitle("Loan book");
+        dialog.setHeaderText("Choose book for reader: " + reader.getName());
+        dialog.setContentText("book: ");
+
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()) {
+            Book selectedbook = library.getBookServices().findBookByTitle(result.get());
+            library.getReaderServices().loanBook(selectedbook, reader);
+            fileHandler.saveReadersToFile();
+            fileHandler.saveBooksToFile();
+            updateReadersList();
+        };
+    }
+
+    @FXML public void handleReturnBook() {
+        Reader selectedReader = readerTable.getSelectionModel().getSelectedItem();
+
+    }
+
+    private static class BorrowedBooksCell extends TableCell<Reader, List<Book>> {
+        private final ComboBox<String> comboBox = new ComboBox<>();
+
+        public BorrowedBooksCell() {
+            comboBox.setPrefHeight(20);
+            comboBox.setPromptText("Borrowed Books");
+        }
+
+        @Override
+        protected void updateItem(List<Book> books, boolean empty) {
+            super.updateItem(books, empty);
+
+            if (empty || books == null || books.isEmpty()) {
+                setGraphic(null);
+            } else {
+                List<String> bookTitles = books.stream().map(Book::getTitle).toList();
+                comboBox.getItems().setAll(bookTitles);
+                setGraphic(comboBox);
+            }
         }
     }
 }

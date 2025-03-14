@@ -6,6 +6,7 @@ import org.example.models.Reader;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class BookServices {
     private List<Book> books;
@@ -28,6 +29,10 @@ public class BookServices {
 
     public void setBooks(List<Book> books) {
         this.books = books;
+    }
+
+    public List<Book> getAvilableBooks() {
+        return books.stream().filter(book -> !book.isLoaned()).collect(Collectors.toList());
     }
 
     public void loanBook(Book book, Reader reader) {
