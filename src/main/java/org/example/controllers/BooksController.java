@@ -25,9 +25,9 @@ public class BooksController {
     @FXML private TableColumn<Book, String> loanedColumn;
 
 
-    public void setBooksFromLibrary(Library library) {
+    public void setBooksFromLibrary(Library library, FileHandler fileHandler) {
         this.library = library;
-        this.fileHandler = new FileHandler(library); // Přidá FileHandler
+        this.fileHandler = fileHandler; // Přidá FileHandler
         this.bookServices = library.getBookServices();
         fileHandler.loadBooksFromFile(); // Načte uložená data
         updateBookList(); // Po nastavení knihovny rovnou načteme knihy
@@ -94,7 +94,6 @@ public class BooksController {
            Book book = bookServices.findBookByTitle(title);
            bookTableView.getItems().clear();
            bookTableView.getItems().add(book);
-           System.out.println("Book loan status " + book.isLoaned());
            bookTitleField.clear();
         } else if (title.isEmpty()) {
             updateBookList();

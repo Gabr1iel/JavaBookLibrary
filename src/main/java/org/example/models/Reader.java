@@ -1,9 +1,11 @@
 package org.example.models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Reader {
+public class Reader implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String name;
     private String birthDate;
     private String address;
