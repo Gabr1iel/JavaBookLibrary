@@ -2,15 +2,19 @@ package org.example.services;
 
 import org.example.models.Book;
 import org.example.models.Reader;
+import org.example.utils.FileHandler;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ReaderServices {
+    private FileHandler fileHandler;
     private List<Reader> readers;
 
-    public ReaderServices() {
-        readers = new ArrayList<>();
+    public ReaderServices(FileHandler fileHandler) {
+        this.fileHandler = fileHandler;
+        readers = fileHandler.loadReadersFromFile();
     }
 
     public void addReader(Reader reader) {

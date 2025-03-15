@@ -29,7 +29,7 @@
         </columns>
     </TableView>
     <HBox spacing="10">
-        <Button text="Loan Book" onAction="#handleLoanBook"/>
+        <Button text="Update Book" onAction="#handleUpdateBook"/>
         <Button text="Remove Book" onAction="#handleRemoveBook"/>
     </HBox>
 </VBox>

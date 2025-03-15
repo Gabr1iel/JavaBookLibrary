@@ -1,9 +1,11 @@
 package org.example.models;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 public class Book implements Serializable {
     private static final long serialVersionUID = 1L;
+    private final String Id = UUID.randomUUID().toString();
     private String title;
     private String author;
     private String releaseDate;
@@ -45,6 +47,10 @@ public class Book implements Serializable {
 
     public void setLoaned(boolean loaned) {
         isLoaned = loaned;
+    }
+
+    public String getId() {
+        return Id;
     }
 
     public void borrowBook() {

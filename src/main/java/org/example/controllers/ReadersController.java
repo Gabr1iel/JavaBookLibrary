@@ -29,11 +29,11 @@ public class ReadersController {
     @FXML private TableColumn<Reader, List<Book>> loanedBooksTableCol;
 
 
-    public void setReadersFromLibrary(Library library, FileHandler fileHandler) {
+    public void setReadersFromLibrary(Library library) {
         this.library = library;
         this.readerServices = library.getReaderServices();
-        this.fileHandler = fileHandler;
-        fileHandler.loadReadersFromFile();
+        this.fileHandler = library.getFileHandler();
+        //fileHandler.loadReadersFromFile();
         updateReadersList();
     }
 
@@ -55,7 +55,7 @@ public class ReadersController {
         if (!readerName.trim().isEmpty() && !birthDate.trim().isEmpty() && !address.trim().isEmpty()) {
             Reader newReader = new Reader(readerName, birthDate, address);
             readerServices.addReader(newReader);
-            fileHandler.saveReadersToFile();
+            fileHandler.saveReadersToFile(library.getReaderServices().getReaders());
             updateReadersList();
             nameField.clear();
             birthDateField.clear();
@@ -68,7 +68,7 @@ public class ReadersController {
 
         if (reader != null) {
             readerServices.removeReader(reader);
-            fileHandler.saveReadersToFile();
+            fileHandler.saveReadersToFile(library.getReaderServices().getReaders());
             updateReadersList();
         }
     }
@@ -110,8 +110,8 @@ public class ReadersController {
         if (result.isPresent()) {
             Book selectedbook = library.getBookServices().findBookByTitle(result.get());
             library.getReaderServices().loanBook(selectedbook, reader);
-            fileHandler.saveReadersToFile();
-            fileHandler.saveBooksToFile();
+            fileHandler.saveReadersToFile(library.getReaderServices().getReaders());
+            fileHandler.saveBooksToFile(library.getBookServices().getBooks());
             updateReadersList();
         };
     }

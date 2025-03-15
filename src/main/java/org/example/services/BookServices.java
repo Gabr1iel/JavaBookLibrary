@@ -1,7 +1,9 @@
 package org.example.services;
 
 import org.example.models.Book;
+import org.example.models.Library;
 import org.example.models.Reader;
+import org.example.utils.FileHandler;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -10,9 +12,11 @@ import java.util.stream.Collectors;
 
 public class BookServices {
     private List<Book> books;
+    private FileHandler fileHandler;
 
-    public BookServices() {
-        books = new ArrayList<>();
+    public BookServices(FileHandler fileHandler) {
+        this.fileHandler = fileHandler;
+        this.books = fileHandler.loadBooksFromFile();
     }
 
     public void addBook(Book book) {
@@ -31,28 +35,16 @@ public class BookServices {
         this.books = books;
     }
 
+    public void updateBook(Book updatedBook) {
+        for (int i = 0; i < books.size(); i++) {
+            if (books.get(i).getId().equals(updatedBook.getId())) {
+                fileHandler.saveBooksToFile(books);
+            }
+        }
+    }
+
     public List<Book> getAvilableBooks() {
         return books.stream().filter(book -> !book.isLoaned()).collect(Collectors.toList());
-    }
-
-    public void loanBook(Book book, Reader reader) {
-        if (!book.isLoaned()) {
-            book.setLoaned(true);
-            reader.addBook(book);
-            System.out.println(reader.getName() + " si zapůjčil " + book.getTitle());
-        } else {
-            System.out.println("Kniha momentálně není dostupná");
-        }
-    }
-
-    public void returnBook(Book book, Reader reader) {
-        if (book.isLoaned() && reader.getBorrowedBooks().contains(book)) {
-            book.setLoaned(false);
-            reader.removeBook(book);
-            System.out.println(reader.getName() + " vrátil knihu " + book.getTitle());
-        } else {
-            System.out.println("Čtenář neměl danou knihu zapůjčenou!");
-        }
     }
 
     public Book findBookByTitle(String bookTitle) {
