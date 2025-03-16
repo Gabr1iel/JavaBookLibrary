@@ -31,7 +31,6 @@ public class BooksController {
         this.library = library;
         this.bookServices = library.getBookServices();
         this.fileHandler = library.getFileHandler();
-        //fileHandler.loadBooksFromFile(); // Načte uložená data
         updateBookList(); // Po nastavení knihovny rovnou načteme knihy
     }
 

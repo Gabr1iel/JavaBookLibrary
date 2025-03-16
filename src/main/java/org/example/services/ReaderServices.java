@@ -1,7 +1,9 @@
 package org.example.services;
 
+import javafx.scene.control.Alert;
 import org.example.models.Book;
 import org.example.models.Reader;
+import org.example.utils.AlertUtils;
 import org.example.utils.FileHandler;
 
 import java.util.List;
@@ -20,6 +22,10 @@ public class ReaderServices {
     }
 
     public void removeReader(Reader reader) {
+        if (reader.getBorrowedBooks() != null) {
+            AlertUtils.showErrorAlert("Error during reader removal", "Cant delete reader with loaned books!");
+            return;
+        }
         readers.remove(reader);
     }
 

@@ -3,6 +3,7 @@ package org.example.services;
 import org.example.models.Book;
 import org.example.models.Library;
 import org.example.models.Reader;
+import org.example.utils.AlertUtils;
 import org.example.utils.FileHandler;
 
 import java.util.ArrayList;
@@ -24,6 +25,10 @@ public class BookServices {
     }
 
     public void removeBook(Book book) {
+        if (book.isLoaned() == true) {
+            AlertUtils.showErrorAlert("Error during book removal", "Cant remove book that is loaned!");
+            return;
+        }
         books.remove(book);
     }
 
