@@ -43,6 +43,11 @@ public class BookServices {
         }
     }
 
+    public void makeBookAvilable(Book book) {
+        book.returnBook();
+        fileHandler.saveBooksToFile(books);
+    }
+
     public List<Book> getAvilableBooks() {
         return books.stream().filter(book -> !book.isLoaned()).collect(Collectors.toList());
     }
