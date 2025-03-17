@@ -2,13 +2,16 @@ package org.example.controllers;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import org.example.models.Book;
 import org.example.models.Library;
 import org.example.models.Reader;
 import org.example.services.ReaderServices;
+import org.example.utils.AlertUtils;
 import org.example.utils.FileHandler;
 
 import java.util.List;
@@ -22,6 +25,7 @@ public class ReadersController {
     @FXML private TextField birthDateField;
     @FXML private TextField addressField;
     @FXML private TextField findByNameField;
+    @FXML private TextField findByLoanedBookField;
     @FXML private TableView<Reader> readerTable;
     @FXML private TableColumn<Reader, String> nameTableCol;
     @FXML private TableColumn<Reader, String> bDateTableCol;
@@ -86,13 +90,57 @@ public class ReadersController {
         }
     }
 
+    public void handleUpdateReader() {
+        Reader updatedReader = readerTable.getSelectionModel().getSelectedItem();
+        if (updatedReader != null) {
+            Dialog<Reader> dialog = new Dialog<>();
+            dialog.setTitle("Edit Reader");
+            dialog.setHeaderText("Edit Reader information");
+
+            ButtonType saveBtn = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
+            dialog.getDialogPane().getButtonTypes().addAll(saveBtn, ButtonType.CANCEL);
+
+            GridPane grid = new GridPane();
+            grid.setHgap(10);
+            grid.setVgap(10);
+            grid.setPadding(new Insets(20, 150, 10, 10));
+
+            TextField nameField = new TextField(updatedReader.getName());
+            TextField birthDateField = new TextField(updatedReader.getBirthDate());
+            TextField addressField = new TextField(updatedReader.getAddress());
+
+            grid.add(new Label("Name"), 0, 0);
+            grid.add(nameField, 1, 0);
+            grid.add(new Label("Birth Date"), 0, 1);
+            grid.add(birthDateField, 1, 1);
+            grid.add(new Label("Address"), 0, 2);
+            grid.add(addressField, 1, 2);
+
+            dialog.getDialogPane().setContent(grid);
+            dialog.setResultConverter(button -> {
+                if (button == saveBtn) {
+                    updatedReader.setName(nameField.getText());
+                    updatedReader.setBirthDate(birthDateField.getText());
+                    updatedReader.setAddress(addressField.getText());
+                    library.getReaderServices().updateReader(updatedReader);
+                    updateReadersList();
+                    return updatedReader;
+                }
+                return null;
+            });
+            dialog.showAndWait();
+        }
+    }
+
     @FXML public void handleLoanBook() {
         Reader reader = readerTable.getSelectionModel().getSelectedItem();
         if (reader == null) {
-            System.out.println("No reader selected");
+            AlertUtils.showErrorAlert("Error during loan", "You have to select a reader!");
+            return;
+        } else if (reader.getBorrowedBooks().size() == 3) {
+            AlertUtils.showErrorAlert("Error during loan", "Reader has already the maximum number of books loaned!");
             return;
         }
-
         List<Book> avilableBooks = library.getBookServices().getAvilableBooks();
         List<String> booksTitle = avilableBooks.stream().map(Book::getTitle).toList();
         if (avilableBooks.isEmpty()) {
@@ -102,7 +150,7 @@ public class ReadersController {
 
         ChoiceDialog<String> dialog = new ChoiceDialog<>(booksTitle.get(0), booksTitle);
         dialog.setTitle("Loan book");
-        dialog.setHeaderText("Choose book for reader: " + reader.getName());
+        dialog.setHeaderText("Choose book for updatedReader: " + reader.getName());
         dialog.setContentText("book: ");
 
         Optional<String> result = dialog.showAndWait();
@@ -113,6 +161,26 @@ public class ReadersController {
             fileHandler.saveBooksToFile(library.getBookServices().getBooks());
             updateReadersList();
         };
+    }
+
+    @FXML private void findReaderByLoanedBook() {
+        String bookTitle = findByLoanedBookField.getText();
+        Book book = library.getBookServices().findBookByTitle(bookTitle);
+        if (book == null) {
+            updateReadersList();
+            return;
+        }
+        Reader reader = library.getReaderServices().findReaderByLoanedBook(book);
+
+        if (reader != null && !bookTitle.trim().isEmpty() && bookTitle != null) {
+            readerTable.getItems().clear();
+            readerTable.getItems().add(reader);
+            findByLoanedBookField.clear();
+        } else if (bookTitle.isEmpty()) {
+            updateReadersList();
+        } else {
+            readerTable.getItems().clear();
+        }
     }
 
     private static class BorrowedBooksCell extends TableCell<Reader, List<Book>> {

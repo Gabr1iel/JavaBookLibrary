@@ -37,6 +37,14 @@ public class ReaderServices {
         this.readers = readers;
     }
 
+    public void updateReader(Reader reader) {
+        for (Reader r : readers) {
+            if (r.getId().equals(reader.getId())) {
+                fileHandler.saveReadersToFile(readers);
+            }
+        }
+    }
+
     public void loanBook(Book book, Reader reader) {
         if (book != null) {
             reader.addBook(book);
@@ -54,6 +62,15 @@ public class ReaderServices {
     public Reader findReaderByName(String name) {
         for (Reader reader : readers) {
             if (reader.getName().equals(name)) {
+                return reader;
+            }
+        }
+        return null;
+    }
+
+    public Reader findReaderByLoanedBook(Book book) {
+        for (Reader reader : readers) {
+            if (reader.getBorrowedBooks().stream().anyMatch(b -> b.getId().equals(book.getId()))) {
                 return reader;
             }
         }

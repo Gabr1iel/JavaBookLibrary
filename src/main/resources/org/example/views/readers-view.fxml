@@ -21,6 +21,8 @@
     <HBox spacing="10">
         <TextField fx:id="findByNameField" promptText="Name to find"/>
         <Button fx:id="findByNameBtn" text="Search" onAction="#findReader"/>
+        <TextField fx:id="findByLoanedBookField" promptText="Book to find"/>
+        <Button fx:id="findByLoanedBookBtn" text="Search" onAction="#findReaderByLoanedBook"/>
     </HBox>
     <TableView fx:id="readerTable">
         <columns>
@@ -28,12 +30,11 @@
             <TableColumn fx:id="addressTableCol" text="Address"/>
             <TableColumn fx:id="bDateTableCol" text="Birth Date"/>
             <TableColumn fx:id="loanedBooksTableCol" text="Loaned Books"/>
-            <TableColumn>
-            </TableColumn>
         </columns>
     </TableView>
     <HBox spacing="10">
         <Button fx:id="loanBookBtn" text="Loan book" onAction="#handleLoanBook"/>
+        <Button fx:id="updateReaderBtn" text="Edit reader" onAction="#handleUpdateReader"/>
         <Button fx:id="removeReaderBtn" onAction="#removeReader" text="Remove"/>
     </HBox>
 </VBox>
