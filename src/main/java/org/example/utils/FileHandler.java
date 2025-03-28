@@ -1,6 +1,7 @@
 package org.example.utils;
 
 import org.example.models.Book;
+import org.example.models.Genre;
 import org.example.models.Reader;
 import org.example.models.Library;
 
@@ -63,6 +64,34 @@ public class FileHandler {
             return readers;
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("Nastala chyba při načítání čtenářů! " + e.getMessage());
+            return new ArrayList<>();
+        }
+    }
+
+    public void saveGenresToFile(List<Genre> genres) {
+        File directory = new File("data");
+        if (!directory.exists()) {
+            directory.mkdir();
+        }
+        if (genres == null || genres.isEmpty()) {
+            System.out.print("Žádné žánry nejsou k dispozici pro uložení!");
+            return;
+        }
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("data/genres_data.ser"))) {
+            oos.writeObject(genres);
+            System.out.println("Žánry byly úspěšně uloženy!");
+        } catch (IOException e) {
+            System.out.println("Error during saving genres!" + e.getMessage());
+        }
+    }
+
+    public List<Genre> loadGenresFromFile() {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("data/genres_data.ser"))) {
+            List<Genre> genres = (List<Genre>) ois.readObject();
+            System.out.println("Genres were loaded successfully!");
+            return genres;
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Error during loading genres!" + e.getMessage());
             return new ArrayList<>();
         }
     }

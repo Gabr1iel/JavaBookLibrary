@@ -8,6 +8,7 @@
         <VBox spacing="10" style="-fx-background-color: #f0f0f0; -fx-padding: 10;">
             <Button text="Books" onAction="#loadBooks"/>
             <Button text="Readers" onAction="#loadReaders"/>
+            <Button text="Genres" onAction="#loadGenres"/>
         </VBox>
     </left>
     <center>

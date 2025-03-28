@@ -41,4 +41,16 @@ public class MainViewController {
             e.printStackTrace();
         }
     }
+
+    public void loadGenres() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/views/genres-view.fxml"));
+            Pane view = loader.load();
+            GenreController genreController = loader.getController();
+            genreController.setGenresFromLibrary(library);
+            contentPane.getChildren().setAll(view);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
