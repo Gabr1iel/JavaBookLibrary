@@ -6,10 +6,17 @@ import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
+import javafx.util.StringConverter;
 import org.example.models.Book;
+import org.example.models.Genre;
 import org.example.models.Library;
 import org.example.services.BookServices;
+import org.example.utils.AlertUtils;
 import org.example.utils.FileHandler;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class BooksController {
     Library library;
@@ -20,17 +27,34 @@ public class BooksController {
     @FXML private TextField bookAuthorField;
     @FXML private TextField bookPublishDateField;
     @FXML private TextField bookTitleFilterField;
+    @FXML private ComboBox<Genre> genreComboBox;
     @FXML private TableView<Book> bookTableView;
     @FXML private TableColumn<Book, String> titleColumn;
     @FXML private TableColumn<Book, String> authorColumn;
     @FXML private TableColumn<Book, String> dateColumn;
     @FXML private TableColumn<Book, String> loanedColumn;
+    @FXML private TableColumn<Book, String> genreColumn;
 
 
     public void setBooksFromLibrary(Library library) {
         this.library = library;
         this.bookServices = library.getBookServices();
         this.fileHandler = library.getFileHandler();
+        genreComboBox.setItems(FXCollections.observableArrayList(library.getGenreServices().getGenres()));
+        genreComboBox.setCellFactory(lc -> new ListCell<Genre>() {
+            @Override
+            protected void updateItem(Genre genre, boolean empty) {
+                super.updateItem(genre, empty);
+                setText((genre == null || empty) ? null : genre.getTitle());
+            }
+        });
+        genreComboBox.setButtonCell(new ListCell<Genre>() {
+            @Override
+            protected void updateItem(Genre genre, boolean empty) {
+                super.updateItem(genre, empty);
+                setText((genre == null || empty) ? null : genre.getTitle());
+            }
+        });
         updateBookList(); // Po nastavení knihovny rovnou načteme knihy
     }
 
@@ -38,6 +62,23 @@ public class BooksController {
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         authorColumn.setCellValueFactory(new PropertyValueFactory<>("author"));
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("releaseDate"));
+        genreColumn.setCellFactory(cellData -> new TableCell<Book, String>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if(empty || getTableRow() == null || getTableRow().getItem() == null) {
+                    setText(null);
+                } else {
+                    Book book = getTableRow().getItem();
+                    if (book.getBookGenres() != null && book.getBookGenres().size() > 0) {
+                        setText(book.getBookGenres().stream().map(genre -> genre.getTitle()).collect(Collectors.joining(", ")));
+                    } else {
+                        setText("Null");
+                    }
+                }
+            }
+        });
         loanedColumn.setCellFactory(cellData -> new TableCell<Book, String>() {
             @Override
             protected void updateItem(String item, boolean empty) {
@@ -67,14 +108,20 @@ public class BooksController {
         String bookTitle = bookTitleField.getText();
         String bookAuthor = bookAuthorField.getText();
         String bookPublishDate = bookPublishDateField.getText();
-        if (!bookTitle.trim().isEmpty() && !bookAuthor.trim().isEmpty() && !bookPublishDate.trim().isEmpty()) {
-            Book newBook = new Book(bookTitle, bookAuthor, bookPublishDate);
+        Genre bookGenre = genreComboBox.getValue();
+        List<Genre> bookGenres = new ArrayList<>();
+        bookGenres.add(bookGenre);
+        if (!bookTitle.trim().isEmpty() && !bookAuthor.trim().isEmpty() && !bookPublishDate.trim().isEmpty() && bookGenre != null) {
+            Book newBook = new Book(bookTitle, bookAuthor, bookPublishDate, bookGenres);
             library.getBookServices().addBook(newBook);
             fileHandler.saveBooksToFile(library.getBookServices().getBooks());
             updateBookList();
             bookTitleField.clear();
             bookAuthorField.clear();
             bookPublishDateField.clear();
+            genreComboBox.setPromptText("Genre");
+        } else {
+            AlertUtils.showErrorAlert("Missing information!","Please enter all information about book!");
         }
     }
 
@@ -105,6 +152,7 @@ public class BooksController {
 
     @FXML private void handleUpdateBook() {
         Book updatedBook = bookTableView.getSelectionModel().getSelectedItem();
+        List<Genre> bookGenres = new ArrayList<>();
         if (updatedBook != null) {
             Dialog<Book> dialog = new Dialog<>();
             dialog.setTitle("Update Book");
@@ -121,6 +169,34 @@ public class BooksController {
             TextField titleField = new TextField(updatedBook.getTitle());
             TextField authorField = new TextField(updatedBook.getAuthor());
             TextField publishDateField = new TextField(updatedBook.getReleaseDate());
+            ComboBox<Genre> genreComboBox = new ComboBox<>();
+            genreComboBox.setItems(FXCollections.observableArrayList(library.getGenreServices().getGenres()));
+            genreComboBox.setCellFactory(lc -> new ListCell<Genre>() {
+                @Override
+                protected void updateItem(Genre genre, boolean empty) {
+                    super.updateItem(genre, empty);
+                    setText((genre == null || empty) ? null : genre.getTitle());
+                }
+            });
+            genreComboBox.setButtonCell(new ListCell<Genre>() {
+                @Override
+                protected void updateItem(Genre genre, boolean empty) {
+                    super.updateItem(genre, empty);
+                    setText((genre == null || empty) ? null : genre.getTitle());
+                }
+            });
+            genreComboBox.setConverter(new StringConverter<Genre>() {
+                @Override
+                public String toString(Genre genre) {
+                    return (genre != null) ? genre.getTitle() : "";
+                }
+
+                @Override
+                public Genre fromString(String string) {
+                    return new Genre(string);
+                }
+            });
+            genreComboBox.setValue(updatedBook.getBookGenres().getFirst());
 
             grid.add(new Label("Title"), 0, 0);
             grid.add(titleField, 1, 0);
@@ -128,6 +204,8 @@ public class BooksController {
             grid.add(authorField, 1, 1);
             grid.add(new Label("Publish Date"), 0, 2);
             grid.add(publishDateField, 1, 2);
+            grid.add(new Label("Genre"), 0, 3);
+            grid.add(genreComboBox, 1, 3);
 
             dialog.getDialogPane().setContent(grid);
 
@@ -136,6 +214,8 @@ public class BooksController {
                     updatedBook.setTitle(titleField.getText());
                     updatedBook.setAuthor(authorField.getText());
                     updatedBook.setReleaseDate(publishDateField.getText());
+                    bookGenres.add(genreComboBox.getValue());
+                    updatedBook.setBookGenres(bookGenres);
                     library.getBookServices().updateBook(updatedBook);
                     updateBookList();
                     return updatedBook;

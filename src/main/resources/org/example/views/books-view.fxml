@@ -8,15 +8,17 @@
 
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.ComboBox?>
 <VBox spacing="10" alignment="CENTER" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.controllers.BooksController">
     <Label text="Library Database" style="-fx-font-size: 24px;"/>
     <HBox spacing="10">
         <TextField fx:id="bookTitleField" promptText="Enter book title"/>
         <TextField fx:id="bookAuthorField" promptText="Enter book author"/>
         <TextField fx:id="bookPublishDateField" promptText="Enter publish date"/>
+        <ComboBox fx:id="genreComboBox" promptText="Genre"/>
         <Button text="Add Book" onAction="#handleAddBook"/>
     </HBox>
-    <HBox>
+    <HBox spacing="10">
         <TextField fx:id="bookTitleFilterField" promptText="Enter book title"/>
         <Button text="Search" onAction="#findBook"/>
     </HBox>
@@ -25,6 +27,7 @@
                 <TableColumn fx:id="titleColumn" text="Title"/>
                 <TableColumn fx:id="authorColumn" text="Author"/>
                 <TableColumn fx:id="dateColumn" text="Publish Date"/>
+                <TableColumn fx:id="genreColumn" text="Genres"/>
                 <TableColumn fx:id="loanedColumn" text="Avilability"/>
         </columns>
     </TableView>

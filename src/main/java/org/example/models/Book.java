@@ -1,6 +1,7 @@
 package org.example.models;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.UUID;
 
 public class Book implements Serializable {
@@ -9,12 +10,14 @@ public class Book implements Serializable {
     private String title;
     private String author;
     private String releaseDate;
+    private List<Genre> bookGenres;
     private boolean isLoaned = false;
 
-    public Book(String title, String author, String releaseDate) {
+    public Book(String title, String author, String releaseDate, List<Genre> bookGenres) {
         this.title = title;
         this.author = author;
         this.releaseDate = releaseDate;
+        this.bookGenres = bookGenres;
     }
 
     public String getTitle() {
@@ -51,6 +54,14 @@ public class Book implements Serializable {
 
     public String getId() {
         return Id;
+    }
+
+    public List<Genre> getBookGenres() {
+        return bookGenres;
+    }
+
+    public void setBookGenres(List<Genre> bookGenres) {
+        this.bookGenres = bookGenres;
     }
 
     public void borrowBook() {

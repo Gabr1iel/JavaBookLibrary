@@ -63,6 +63,8 @@ public class ReadersController {
             nameField.clear();
             birthDateField.clear();
             addressField.clear();
+        } else {
+            AlertUtils.showErrorAlert("Missing Information!", "Please fill out all information about reader!");
         }
     }
 
