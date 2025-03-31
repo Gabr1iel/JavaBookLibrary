@@ -1,6 +1,7 @@
 package org.example.services;
 
 import org.example.models.Book;
+import org.example.models.Genre;
 import org.example.models.Library;
 import org.example.models.Reader;
 import org.example.utils.AlertUtils;
@@ -67,9 +68,25 @@ public class BookServices {
         return null;
     }
 
-    public List<Book> findBookByAuthor(String bookAuthor) {
-        return getBooks().stream()
+    public List<Book> findBookByAuthor(String bookAuthor, List<Book> books) {
+        return books.stream()
                 .filter(book -> book.getAuthor().equals(bookAuthor)).toList();
+    }
+
+    public List<Book> findBookByGenre(String bookGenre, List<Book> books) {
+        System.out.println(books);
+        List<Book> filteredBooks = new ArrayList<>();
+        for (Book book : books) {
+            List<Genre> genres = book.getBookGenres();
+            for (Genre genre : genres) {
+                System.out.println(genre.getTitle());
+                if (genre.getTitle().equals(bookGenre)) {
+                    filteredBooks.add(book);
+                }
+            }
+        }
+        System.out.println(filteredBooks);
+        return filteredBooks;
     }
 
     public List<Book> sortByTitle() {

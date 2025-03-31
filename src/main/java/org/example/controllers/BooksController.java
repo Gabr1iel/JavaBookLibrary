@@ -27,6 +27,8 @@ public class BooksController {
     @FXML private TextField bookAuthorField;
     @FXML private TextField bookPublishDateField;
     @FXML private TextField bookTitleFilterField;
+    @FXML private TextField bookAuthorFilterField;
+    @FXML private TextField bookGenreFilterField;
     @FXML private ComboBox<Genre> genreComboBox;
     @FXML private TableView<Book> bookTableView;
     @FXML private TableColumn<Book, String> titleColumn;
@@ -135,15 +137,29 @@ public class BooksController {
         }
     }
 
-    @FXML private void findBook() {
+    @FXML private void handleFindBook() {
         String title = bookTitleFilterField.getText();
+        String author = bookAuthorFilterField.getText();
+        String genre = bookGenreFilterField.getText();
+        List<Book> filteredBooks = new ArrayList<>();
 
-        if (title != null && !title.isEmpty() && bookServices.findBookByTitle(title) != null) {
-           Book book = bookServices.findBookByTitle(title);
-           bookTableView.getItems().clear();
-           bookTableView.getItems().add(book);
-           bookTitleField.clear();
-        } else if (title.isEmpty()) {
+        if (title != null && !title.trim().isEmpty()) {
+            filteredBooks.add(library.getBookServices().findBookByTitle(title));
+        }
+        if (filteredBooks.isEmpty() && author != null) {
+            filteredBooks = new ArrayList<>(library.getBookServices().findBookByAuthor(author, library.getBookServices().getBooks()));
+        }
+        if (filteredBooks.isEmpty() && genre != null) {
+            filteredBooks = new ArrayList<>(library.getBookServices().findBookByGenre(genre, library.getBookServices().getBooks()));
+        }
+        if (!filteredBooks.isEmpty() && genre != null && !genre.trim().isEmpty()) {
+            filteredBooks = new ArrayList<>(library.getBookServices().findBookByGenre(genre, filteredBooks));
+        }
+
+        if ((title != null && !title.isEmpty()) || (author != null && !author.isEmpty()) || (genre != null && !genre.isEmpty())) {
+            bookTableView.getItems().clear();
+            bookTableView.getItems().addAll(filteredBooks);
+        } else if((title == null || title.isEmpty()) && (author == null || author.isEmpty()) && (genre == null || genre.isEmpty())) {
             updateBookList();
         } else {
             bookTableView.getItems().clear();

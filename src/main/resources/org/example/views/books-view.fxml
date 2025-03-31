@@ -20,7 +20,9 @@
     </HBox>
     <HBox spacing="10">
         <TextField fx:id="bookTitleFilterField" promptText="Enter book title"/>
-        <Button text="Search" onAction="#findBook"/>
+        <TextField fx:id="bookAuthorFilterField" promptText="Enter book author"/>
+        <TextField fx:id="bookGenreFilterField" promptText="Enter genre"/>
+        <Button text="Search" onAction="#handleFindBook"/>
     </HBox>
     <TableView fx:id="bookTableView">
         <columns>
