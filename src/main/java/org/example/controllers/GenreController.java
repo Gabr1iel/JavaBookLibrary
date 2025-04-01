@@ -11,8 +11,6 @@ import org.example.models.Library;
 import org.example.services.GenreServices;
 import org.example.utils.FileHandler;
 
-import java.nio.ReadOnlyBufferException;
-
 public class GenreController {
     Library library;
     GenreServices genreServices;
@@ -33,7 +31,7 @@ public class GenreController {
         genreListView.setItems(genresList);
     }
 
-    public void handleAddGenre() {
+    @FXML private void handleAddGenre() {
         String title = genreTitleField.getText();
         if (!title.trim().isEmpty()) {
             Genre genre = new Genre(title);
@@ -44,7 +42,7 @@ public class GenreController {
         }
     }
 
-    public void handleRemoveGenre() {
+    @FXML private void handleRemoveGenre() {
         String title = genreListView.getSelectionModel().getSelectedItem();
         if (!title.trim().isEmpty()) {
             Genre genre = library.getGenreServices().getGenreByTitle(title);
@@ -54,7 +52,7 @@ public class GenreController {
         }
     }
 
-    public void handleFindGenre() {
+    @FXML private void handleFindGenre() {
         String title = findGenreByTitleField.getText();
         Genre genre = library.getGenreServices().getGenreByTitle(title);
         if (!title.trim().isEmpty() && genre != null) {
@@ -67,7 +65,7 @@ public class GenreController {
         }
     }
 
-    public void handleEditGenre() {
+    @FXML private void handleEditGenre() {
         String title = genreListView.getSelectionModel().getSelectedItem();
         if (!title.trim().isEmpty()) {
             Genre genre = library.getGenreServices().getGenreByTitle(title);

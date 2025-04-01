@@ -54,7 +54,7 @@ public class ReadersController {
         readerTable.setItems(FXCollections.observableArrayList(readerServices.getReaders()));
     }
 
-    public void addReader() {
+    @FXML private void handleAddReader() {
         String readerName = nameField.getText();
         String email = emailField.getText();
         String address = addressField.getText();
@@ -72,7 +72,7 @@ public class ReadersController {
         }
     }
 
-    public void removeReader() {
+    @FXML private void handleRemoveReader() {
         Reader reader = readerTable.getSelectionModel().getSelectedItem();
 
         if (reader != null) {
@@ -82,7 +82,7 @@ public class ReadersController {
         }
     }
 
-    public void findReader() {
+    @FXML private void handleFindReader() {
         String name = findByNameField.getText();
         if (!name.trim().isEmpty() && name != null && library.getReaderServices().findReaderByName(name) != null) {
             Reader reader = library.getReaderServices().findReaderByName(name);
@@ -96,7 +96,7 @@ public class ReadersController {
         }
     }
 
-    public void handleUpdateReader() {
+    @FXML private void handleUpdateReader() {
         Reader updatedReader = readerTable.getSelectionModel().getSelectedItem();
         if (updatedReader != null) {
             Dialog<Reader> dialog = new Dialog<>();
