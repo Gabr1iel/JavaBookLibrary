@@ -10,15 +10,15 @@
 <?import javafx.scene.control.Button?>
 
 <?import javafx.scene.text.Text?>
-<VBox spacing="10" xmlns:fx="http://javafx.com/fxml" fx:controller="org.example.controllers.ReadersController">
+<VBox spacing="10" style="-fx-padding: 10px" alignment="CENTER_LEFT" xmlns:fx="http://javafx.com/fxml" fx:controller="org.example.controllers.ReadersController">
     <Label text="Readers" style="-fx-font-size: 24px"/>
-    <HBox spacing="10">
+    <HBox spacing="10" alignment="CENTER_LEFT">
         <TextField fx:id="nameField" promptText="Name"/>
         <TextField fx:id="addressField" promptText="Address"/>
-        <TextField fx:id="birthDateField" promptText="Birth Date"/>
+        <TextField fx:id="emailField" promptText="Email"/>
         <Button onAction="#addReader" fx:id="createReaderBtn" text="Create"/>
     </HBox>
-    <HBox spacing="10">
+    <HBox spacing="10" alignment="CENTER_LEFT">
         <TextField fx:id="findByNameField" promptText="Name to find"/>
         <Button fx:id="findByNameBtn" text="Search" onAction="#findReader"/>
         <TextField fx:id="findByLoanedBookField" promptText="Book to find"/>
@@ -28,13 +28,13 @@
         <columns>
             <TableColumn fx:id="nameTableCol" text="Name"/>
             <TableColumn fx:id="addressTableCol" text="Address"/>
-            <TableColumn fx:id="bDateTableCol" text="Birth Date"/>
+            <TableColumn fx:id="emailTableCol" text="Email"/>
             <TableColumn fx:id="loanedBooksTableCol" text="Loaned Books"/>
         </columns>
     </TableView>
     <HBox spacing="10">
         <Button fx:id="loanBookBtn" text="Loan book" onAction="#handleLoanBook"/>
         <Button fx:id="updateReaderBtn" text="Edit reader" onAction="#handleUpdateReader"/>
-        <Button fx:id="removeReaderBtn" onAction="#removeReader" text="Remove"/>
+        <Button fx:id="removeReaderBtn" styleClass="delete-btn" onAction="#removeReader" text="Remove"/>
     </HBox>
 </VBox>

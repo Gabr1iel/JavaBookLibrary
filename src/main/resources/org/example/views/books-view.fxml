@@ -9,21 +9,23 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.ComboBox?>
-<VBox spacing="10" alignment="CENTER" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.controllers.BooksController">
-    <Label text="Library Database" style="-fx-font-size: 24px;"/>
-    <HBox spacing="10">
-        <TextField fx:id="bookTitleField" promptText="Enter book title"/>
-        <TextField fx:id="bookAuthorField" promptText="Enter book author"/>
-        <TextField fx:id="bookPublishDateField" promptText="Enter publish date"/>
-        <ComboBox fx:id="genreComboBox" promptText="Genre"/>
-        <Button text="Add Book" onAction="#handleAddBook"/>
-    </HBox>
-    <HBox spacing="10">
-        <TextField fx:id="bookTitleFilterField" promptText="Enter book title"/>
-        <TextField fx:id="bookAuthorFilterField" promptText="Enter book author"/>
-        <TextField fx:id="bookGenreFilterField" promptText="Enter genre"/>
-        <Button text="Search" onAction="#handleFindBook"/>
-    </HBox>
+<VBox style="-fx-padding: 10" spacing="10" alignment="CENTER_LEFT" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.controllers.BooksController">
+    <Label text="Books" style="-fx-font-size: 24px;"/>
+    <VBox spacing="10" style="-fx-max-width: 800">
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <TextField fx:id="bookTitleField" promptText="Enter book title"/>
+            <TextField fx:id="bookAuthorField" promptText="Enter book author"/>
+            <TextField fx:id="bookPublishDateField" promptText="Enter publish date"/>
+            <ComboBox fx:id="genreComboBox" promptText="Genre"/>
+            <Button text="Add Book" onAction="#handleAddBook"/>
+        </HBox>
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <TextField fx:id="bookTitleFilterField" promptText="Enter book title"/>
+            <TextField fx:id="bookAuthorFilterField" promptText="Enter book author"/>
+            <TextField fx:id="bookGenreFilterField" promptText="Enter genre"/>
+            <Button text="Search" onAction="#handleFindBook"/>
+        </HBox>
+    </VBox>
     <TableView fx:id="bookTableView">
         <columns>
                 <TableColumn fx:id="titleColumn" text="Title"/>
@@ -33,8 +35,8 @@
                 <TableColumn fx:id="loanedColumn" text="Avilability"/>
         </columns>
     </TableView>
-    <HBox spacing="10">
-        <Button text="Update Book" onAction="#handleUpdateBook"/>
-        <Button text="Remove Book" onAction="#handleRemoveBook"/>
+    <HBox spacing="10" style="-fx-max-width: 800">
+        <Button text="Edit Book" styleClass="edit-btn" onAction="#handleUpdateBook"/>
+        <Button text="Remove Book" styleClass="delete-btn" onAction="#handleRemoveBook"/>
     </HBox>
 </VBox>

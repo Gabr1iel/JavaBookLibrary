@@ -9,13 +9,13 @@ public class Reader implements Serializable {
     private static final long serialVersionUID = 1L;
     private static String Id = UUID.randomUUID().toString();
     private String name;
-    private String birthDate;
+    private String email;
     private String address;
     private List<Book> borrowedBooks;
 
-    public Reader(String name, String birthDate, String address) {
+    public Reader(String name, String email, String address) {
         this.name = name;
-        this.birthDate = birthDate;
+        this.email = email;
         this.address = address;
         this.borrowedBooks = new ArrayList<>();
     }
@@ -28,12 +28,12 @@ public class Reader implements Serializable {
         this.name = name;
     }
 
-    public String getBirthDate() {
-        return birthDate;
+    public String getEmail() {
+        return email;
     }
 
-    public void setBirthDate(String birthDate) {
-        this.birthDate = birthDate;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getAddress() {

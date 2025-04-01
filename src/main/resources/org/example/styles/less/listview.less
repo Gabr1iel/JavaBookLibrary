@@ -1,0 +1,21 @@
+.list-view {
+  -fx-background-color: white;
+  -fx-border-color: #ccc;
+  -fx-border-radius: 5px;
+  -fx-max-width: 800;
+
+  &.list-cell {
+    -fx-padding: 10px;
+    -fx-border-color: transparent;
+    -fx-font-size: @normal-font;
+
+    &:filled:selected, &:filled:selected:hover {
+      -fx-background-color: @main-blue;
+      -fx-text-fill: white;
+    }
+    &:filled:hover {
+      -fx-background-color: #e0e0e0;
+    }
+  }
+
+}

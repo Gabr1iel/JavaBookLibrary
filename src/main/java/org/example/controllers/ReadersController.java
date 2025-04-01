@@ -22,13 +22,13 @@ public class ReadersController {
     ReaderServices readerServices;
     FileHandler fileHandler;
     @FXML private TextField nameField;
-    @FXML private TextField birthDateField;
+    @FXML private TextField emailField;
     @FXML private TextField addressField;
     @FXML private TextField findByNameField;
     @FXML private TextField findByLoanedBookField;
     @FXML private TableView<Reader> readerTable;
     @FXML private TableColumn<Reader, String> nameTableCol;
-    @FXML private TableColumn<Reader, String> bDateTableCol;
+    @FXML private TableColumn<Reader, String> emailTableCol;
     @FXML private TableColumn<Reader, String> addressTableCol;
     @FXML private TableColumn<Reader, List<Book>> loanedBooksTableCol;
 
@@ -40,9 +40,13 @@ public class ReadersController {
         updateReadersList();
     }
 
+    @FXML public  void initialize() {
+        readerTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    }
+
     private void updateReadersList() {
         nameTableCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-        bDateTableCol.setCellValueFactory(new PropertyValueFactory<>("birthDate"));
+        emailTableCol.setCellValueFactory(new PropertyValueFactory<>("email"));
         addressTableCol.setCellValueFactory(new PropertyValueFactory<>("address"));
         loanedBooksTableCol.setCellValueFactory(new PropertyValueFactory<>("borrowedBooks"));
         loanedBooksTableCol.setCellFactory(column -> new BorrowedBooksCell(library));
@@ -52,16 +56,16 @@ public class ReadersController {
 
     public void addReader() {
         String readerName = nameField.getText();
-        String birthDate = birthDateField.getText();
+        String email = emailField.getText();
         String address = addressField.getText();
 
-        if (!readerName.trim().isEmpty() && !birthDate.trim().isEmpty() && !address.trim().isEmpty()) {
-            Reader newReader = new Reader(readerName, birthDate, address);
+        if (!readerName.trim().isEmpty() && !email.trim().isEmpty() && !address.trim().isEmpty()) {
+            Reader newReader = new Reader(readerName, email, address);
             readerServices.addReader(newReader);
             fileHandler.saveReadersToFile(library.getReaderServices().getReaders());
             updateReadersList();
             nameField.clear();
-            birthDateField.clear();
+            emailField.clear();
             addressField.clear();
         } else {
             AlertUtils.showErrorAlert("Missing Information!", "Please fill out all information about reader!");
@@ -108,13 +112,13 @@ public class ReadersController {
             grid.setPadding(new Insets(20, 150, 10, 10));
 
             TextField nameField = new TextField(updatedReader.getName());
-            TextField birthDateField = new TextField(updatedReader.getBirthDate());
+            TextField emailField = new TextField(updatedReader.getEmail());
             TextField addressField = new TextField(updatedReader.getAddress());
 
             grid.add(new Label("Name"), 0, 0);
             grid.add(nameField, 1, 0);
-            grid.add(new Label("Birth Date"), 0, 1);
-            grid.add(birthDateField, 1, 1);
+            grid.add(new Label("Email"), 0, 1);
+            grid.add(emailField, 1, 1);
             grid.add(new Label("Address"), 0, 2);
             grid.add(addressField, 1, 2);
 
@@ -122,7 +126,7 @@ public class ReadersController {
             dialog.setResultConverter(button -> {
                 if (button == saveBtn) {
                     updatedReader.setName(nameField.getText());
-                    updatedReader.setBirthDate(birthDateField.getText());
+                    updatedReader.setEmail(emailField.getText());
                     updatedReader.setAddress(addressField.getText());
                     library.getReaderServices().updateReader(updatedReader);
                     updateReadersList();

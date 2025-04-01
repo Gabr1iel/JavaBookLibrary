@@ -93,7 +93,7 @@ public class BooksController {
                     if (book.isLoaned()) {
                         setText("Loaned");
                     } else {
-                        setText("Avilable");
+                        setText("Available");
                     }
                 }
             }
@@ -104,6 +104,7 @@ public class BooksController {
 
     @FXML public void initialize() {
         System.out.println("LibraryController byl inicializován!");
+        bookTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
     @FXML private void handleAddBook() {

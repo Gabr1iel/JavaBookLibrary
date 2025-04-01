@@ -14,6 +14,7 @@ public class MainViewController {
     @FXML private StackPane contentPane;
 
     @FXML private void initialize() {
+        contentPane.getStylesheets().add(getClass().getResource("/org/example/styles/style.css").toExternalForm());
         loadBooks();
     }
 
