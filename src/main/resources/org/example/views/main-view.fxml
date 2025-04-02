@@ -6,9 +6,9 @@
 <BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="org.example.controllers.MainViewController">
     <left>
         <VBox spacing="10" style="-fx-background-color: #f0f0f0; -fx-padding: 10;">
-            <Button styleClass="styled-btn" text="Books" onAction="#loadBooks"/>
-            <Button text="Readers" onAction="#loadReaders"/>
-            <Button text="Genres" onAction="#loadGenres"/>
+            <Button style="-fx-background-color: #3498db; -fx-text-fill: white;-fx-font-weight: bold;-fx-font-size: 14px;-fx-border-radius: 5px;-fx-padding: 4px 15px; -fx-cursor: hand" text="Books" onAction="#loadBooks"/>
+            <Button style="-fx-background-color: #3498db; -fx-text-fill: white;-fx-font-weight: bold;-fx-font-size: 14px;-fx-border-radius: 5px;-fx-padding: 4px 15px; -fx-cursor: hand"  text="Readers" onAction="#loadReaders"/>
+            <Button style="-fx-background-color: #3498db; -fx-text-fill: white;-fx-font-weight: bold;-fx-font-size: 14px;-fx-border-radius: 5px;-fx-padding: 4px 15px; -fx-cursor: hand"  text="Genres" onAction="#loadGenres"/>
         </VBox>
     </left>
     <center>

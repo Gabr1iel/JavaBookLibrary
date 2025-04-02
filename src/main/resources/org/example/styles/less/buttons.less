@@ -1,4 +1,4 @@
-.button {
+.button, .styled-btn {
   -fx-background-color: @main-blue;
   -fx-text-fill: white;
   -fx-font-weight: bold;
@@ -8,8 +8,13 @@
 
   &.delete-btn {
     -fx-background-color: @delete-red;
+
+    &:hover {
+      -fx-background-color: darken(@delete-red, 10%);
+    }
   }
   &:hover {
-    -fx-cursor: pointer;
+    -fx-cursor: hand;
+    -fx-background-color: darken(@main-blue, 10%);
   }
 }
