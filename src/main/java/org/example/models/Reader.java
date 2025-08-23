@@ -2,22 +2,23 @@ package org.example.models;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
 public class Reader implements Serializable {
     private static final long serialVersionUID = 1L;
-    private static String Id = UUID.randomUUID().toString();
+    private final String Id = UUID.randomUUID().toString();
     private String name;
     private String email;
     private String address;
-    private List<Book> borrowedBooks;
+    private final HashMap<String, Book> borrowedBooks;
 
     public Reader(String name, String email, String address) {
         this.name = name;
         this.email = email;
         this.address = address;
-        this.borrowedBooks = new ArrayList<>();
+        this.borrowedBooks = new HashMap<>();
     }
 
     public String getName() {
@@ -44,7 +45,7 @@ public class Reader implements Serializable {
         this.address = address;
     }
 
-    public List<Book> getBorrowedBooks() {
+    public HashMap<String, Book> getBorrowedBooks() {
         return borrowedBooks;
     }
 
@@ -53,10 +54,12 @@ public class Reader implements Serializable {
     }
 
     public void addBook(Book book) {
-        borrowedBooks.add(book);
+        borrowedBooks.put(book.getId(), book);
     }
 
     public void removeBook(Book book) {
-        borrowedBooks.remove(book);
+        System.out.println(book.getTitle());
+        borrowedBooks.remove(book.getId());
+        System.out.println("Smazáno");
     }
 }

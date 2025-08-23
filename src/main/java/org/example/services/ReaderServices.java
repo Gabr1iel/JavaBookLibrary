@@ -51,7 +51,9 @@ public class ReaderServices {
 
     public void returnLoanedBook(Book book, Reader reader) {
         if (book != null) {
+            System.out.println(book.getTitle() + reader.getName());
             reader.removeBook(book);
+            System.out.println("Tady jsme taky");
             saveReaders();
         }
     }
@@ -67,7 +69,7 @@ public class ReaderServices {
 
     public Reader findReaderByLoanedBook(Book book) {
         for (Reader reader : readers) {
-            if (reader.getBorrowedBooks().stream().anyMatch(b -> b.getId().equals(book.getId()))) {
+            if (reader.getBorrowedBooks().containsKey(book.getId())) {
                 return reader;
             }
         }

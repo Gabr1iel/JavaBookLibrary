@@ -13,6 +13,7 @@ import org.example.services.BookServices;
 import org.example.services.ReaderServices;
 import org.example.utils.AlertUtils;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,7 +30,7 @@ public class ReadersController {
     @FXML private TableColumn<Reader, String> nameTableCol;
     @FXML private TableColumn<Reader, String> emailTableCol;
     @FXML private TableColumn<Reader, String> addressTableCol;
-    @FXML private TableColumn<Reader, List<Book>> loanedBooksTableCol;
+    @FXML private TableColumn<Reader, HashMap<String, Book>> loanedBooksTableCol;
 
 
     public void setReaderController(ReaderServices readerServices, BookServices bookServices) {
@@ -50,6 +51,10 @@ public class ReadersController {
         loanedBooksTableCol.setCellFactory(column -> new BorrowedBooksCell(bookServices, readerServices));
 
         readerTable.setItems(FXCollections.observableArrayList(readerServices.getReaders()));
+
+            for (Reader reader : readerServices.getReaders()) {
+                System.out.println(reader.getBorrowedBooks());
+            }
     }
 
     @FXML private void handleAddReader() {
@@ -187,7 +192,7 @@ public class ReadersController {
         }
     }
 
-    private static class BorrowedBooksCell extends TableCell<Reader, List<Book>> {
+    private static class BorrowedBooksCell extends TableCell<Reader, HashMap<String, Book>> {
         private final ComboBox<String> comboBox = new ComboBox<>();
         private final Button returnButton = new Button("Return");
 
@@ -198,7 +203,8 @@ public class ReadersController {
             returnButton.setOnAction(event -> {
                 Book selectedBook = bookServices.findBookByTitle(comboBox.getValue());
                 if (selectedBook != null) {
-                    Reader reader = getTableView().getItems().get(getIndex());
+                    Reader reader = readerServices.findReaderByLoanedBook(selectedBook);
+                    System.out.println("kniha" + selectedBook + "reader" + reader);
                     readerServices.returnLoanedBook(selectedBook, reader);
                     bookServices.makeBookAvilable(selectedBook);
                     comboBox.getItems().remove(selectedBook);
@@ -212,13 +218,13 @@ public class ReadersController {
         }
 
         @Override
-        protected void updateItem(List<Book> books, boolean empty) {
+        protected void updateItem(HashMap<String, Book> books, boolean empty) {
             super.updateItem(books, empty);
 
             if (empty || books == null || books.isEmpty()) {
                 setGraphic(null);
             } else {
-                List<String> bookTitles = books.stream().map(Book::getTitle).toList();
+                List<String> bookTitles = books.values().stream().map(Book::getTitle).toList();
                 comboBox.getItems().setAll(bookTitles);
                 setGraphic(new HBox(5, comboBox, returnButton));
             }
