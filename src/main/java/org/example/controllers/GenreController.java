@@ -7,27 +7,22 @@ import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import org.example.models.Genre;
-import org.example.models.Library;
 import org.example.services.GenreServices;
-import org.example.utils.FileHandler;
 
 public class GenreController {
-    Library library;
     GenreServices genreServices;
-    FileHandler fileHandler;
+
     @FXML TextField genreTitleField;
     @FXML TextField findGenreByTitleField;
     @FXML ListView<String> genreListView;
 
-    public void setGenresFromLibrary(Library library) {
-        this.library = library;
-        this.genreServices = library.getGenreServices();
-        this.fileHandler = library.getFileHandler();
+    public void setGenreController(GenreServices genreServices) {
+        this.genreServices = genreServices;
         updateGenresList();
     }
 
     public void updateGenresList() {
-        ObservableList<String> genresList = FXCollections.observableArrayList(library.getGenreServices().getGenres().stream().map(Genre::getTitle).toList());
+        ObservableList<String> genresList = FXCollections.observableArrayList(genreServices.getGenres().stream().map(Genre::getTitle).toList());
         genreListView.setItems(genresList);
     }
 
@@ -35,8 +30,8 @@ public class GenreController {
         String title = genreTitleField.getText();
         if (!title.trim().isEmpty()) {
             Genre genre = new Genre(title);
-            library.getGenreServices().addGenre(genre);
-            library.getFileHandler().saveGenresToFile(library.getGenreServices().getGenres());
+            genreServices.addGenre(genre);
+            genreServices.saveGenres();
             updateGenresList();
             genreTitleField.clear();
         }
@@ -45,16 +40,16 @@ public class GenreController {
     @FXML private void handleRemoveGenre() {
         String title = genreListView.getSelectionModel().getSelectedItem();
         if (!title.trim().isEmpty()) {
-            Genre genre = library.getGenreServices().getGenreByTitle(title);
-            library.getGenreServices().removeGenre(genre);
-            library.getFileHandler().saveGenresToFile(library.getGenreServices().getGenres());
+            Genre genre = genreServices.getGenreByTitle(title);
+            genreServices.removeGenre(genre);
+            genreServices.saveGenres();
             updateGenresList();
         }
     }
 
     @FXML private void handleFindGenre() {
         String title = findGenreByTitleField.getText();
-        Genre genre = library.getGenreServices().getGenreByTitle(title);
+        Genre genre = genreServices.getGenreByTitle(title);
         if (!title.trim().isEmpty() && genre != null) {
             genreListView.getItems().clear();
             genreListView.getItems().add(genre.getTitle());
@@ -68,7 +63,7 @@ public class GenreController {
     @FXML private void handleEditGenre() {
         String title = genreListView.getSelectionModel().getSelectedItem();
         if (!title.trim().isEmpty()) {
-            Genre genre = library.getGenreServices().getGenreByTitle(title);
+            Genre genre = genreServices.getGenreByTitle(title);
             Dialog<Genre> dialog = new Dialog<>();
             dialog.setTitle("Edit Genre");
             dialog.setHeaderText("Edit Genre");
@@ -91,7 +86,7 @@ public class GenreController {
             dialog.setResultConverter(dialogButton -> {
                 if (dialogButton == saveBtn) {
                     genre.setTitle(genreTitleField.getText());
-                    library.getGenreServices().editGenre(genre);
+                    genreServices.editGenre(genre);
                     updateGenresList();
                     return genre;
                 }

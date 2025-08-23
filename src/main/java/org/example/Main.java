@@ -17,10 +17,6 @@ import java.io.IOException;
 public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        final BinaryFileHandler binaryFileHandler = new BinaryFileHandler();
-        final BookServices bookServices = new BookServices(binaryFileHandler);
-        final ReaderServices readerServices = new ReaderServices(binaryFileHandler);
-        final GenreServices genreServices = new GenreServices(binaryFileHandler);
         FXMLLoader fxmlloader = new FXMLLoader(getClass().getResource("/org/example/views/main-view.fxml"));
         Parent root = fxmlloader.load();
         System.out.println("FXML načteno: " + (fxmlloader.getLocation() != null));

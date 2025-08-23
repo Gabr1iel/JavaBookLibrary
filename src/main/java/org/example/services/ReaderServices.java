@@ -4,21 +4,26 @@ import javafx.scene.control.Alert;
 import org.example.models.Book;
 import org.example.models.Reader;
 import org.example.utils.AlertUtils;
+import org.example.utils.BinaryFileHandler;
 import org.example.utils.FileHandler;
 
 import java.util.List;
 
 public class ReaderServices {
-    private FileHandler fileHandler;
+    private final BinaryFileHandler binaryFileHandler;
     private List<Reader> readers;
 
-    public ReaderServices(FileHandler fileHandler) {
-        this.fileHandler = fileHandler;
-        readers = fileHandler.loadReadersFromFile();
+    public ReaderServices(BinaryFileHandler binaryFileHandler) {
+        this.binaryFileHandler = binaryFileHandler;
+        readers = binaryFileHandler.loadContent("data/readers_data.ser", Reader.class);
     }
 
     public void addReader(Reader reader) {
         readers.add(reader);
+    }
+
+    public void saveReaders() {
+        binaryFileHandler.save("data/readers_data.ser", readers, Reader.class);
     }
 
     public void removeReader(Reader reader) {
@@ -29,18 +34,10 @@ public class ReaderServices {
         readers.remove(reader);
     }
 
-    public List<Reader> getReaders() {
-        return readers;
-    }
-
-    public void setReaders(List<Reader> readers) {
-        this.readers = readers;
-    }
-
     public void updateReader(Reader reader) {
         for (Reader r : readers) {
             if (r.getId().equals(reader.getId())) {
-                fileHandler.saveReadersToFile(readers);
+                saveReaders();
             }
         }
     }
@@ -55,7 +52,7 @@ public class ReaderServices {
     public void returnLoanedBook(Book book, Reader reader) {
         if (book != null) {
             reader.removeBook(book);
-            fileHandler.saveReadersToFile(readers);
+            saveReaders();
         }
     }
 
@@ -75,5 +72,13 @@ public class ReaderServices {
             }
         }
         return null;
+    }
+
+    public List<Reader> getReaders() {
+        return readers;
+    }
+
+    public void setReaders(List<Reader> readers) {
+        this.readers = readers;
     }
 }

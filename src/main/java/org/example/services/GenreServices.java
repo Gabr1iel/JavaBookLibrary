@@ -1,25 +1,26 @@
 package org.example.services;
 
 import org.example.models.Genre;
+import org.example.utils.BinaryFileHandler;
 import org.example.utils.FileHandler;
 
 import java.util.List;
 
 public class GenreServices {
     private List<Genre> genres;
-    private FileHandler fileHandler;
+    private final BinaryFileHandler binaryFileHandler;
 
-    public GenreServices(FileHandler fileHandler) {
-        this.fileHandler = fileHandler;
-        this.genres = fileHandler.loadGenresFromFile();
-    }
-
-    public List<Genre> getGenres() {
-        return genres;
+    public GenreServices(BinaryFileHandler binaryFileHandler) {
+        this.binaryFileHandler = binaryFileHandler;
+        this.genres = binaryFileHandler.loadContent("data/genres_data.ser", Genre.class);
     }
 
     public void addGenre(Genre genre) {
         genres.add(genre);
+    }
+
+    public void saveGenres() {
+        binaryFileHandler.save("data/genres_data.ser", genres, Genre.class);
     }
 
     public void removeGenre(Genre genre) {
@@ -38,8 +39,12 @@ public class GenreServices {
     public void editGenre(Genre genre) {
         for (int i = 0; i < genres.size(); i++) {
             if (genres.get(i).getId().equals(genre.getId())) {
-                fileHandler.saveGenresToFile(genres);
+                saveGenres();
             }
         }
+    }
+
+    public List<Genre> getGenres() {
+        return genres;
     }
 }

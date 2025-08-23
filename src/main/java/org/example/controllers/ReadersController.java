@@ -8,19 +8,18 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import org.example.models.Book;
-import org.example.models.Library;
 import org.example.models.Reader;
+import org.example.services.BookServices;
 import org.example.services.ReaderServices;
 import org.example.utils.AlertUtils;
-import org.example.utils.FileHandler;
 
 import java.util.List;
 import java.util.Optional;
 
 public class ReadersController {
-    Library library;
     ReaderServices readerServices;
-    FileHandler fileHandler;
+    BookServices bookServices;
+
     @FXML private TextField nameField;
     @FXML private TextField emailField;
     @FXML private TextField addressField;
@@ -33,23 +32,22 @@ public class ReadersController {
     @FXML private TableColumn<Reader, List<Book>> loanedBooksTableCol;
 
 
-    public void setReadersFromLibrary(Library library) {
-        this.library = library;
-        this.readerServices = library.getReaderServices();
-        this.fileHandler = library.getFileHandler();
-        updateReadersList();
+    public void setReaderController(ReaderServices readerServices, BookServices bookServices) {
+        this.readerServices = readerServices;
+        this.bookServices = bookServices;
+        loadReadersList();
     }
 
     @FXML public  void initialize() {
         readerTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
-    private void updateReadersList() {
+    private void loadReadersList() {
         nameTableCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         emailTableCol.setCellValueFactory(new PropertyValueFactory<>("email"));
         addressTableCol.setCellValueFactory(new PropertyValueFactory<>("address"));
         loanedBooksTableCol.setCellValueFactory(new PropertyValueFactory<>("borrowedBooks"));
-        loanedBooksTableCol.setCellFactory(column -> new BorrowedBooksCell(library));
+        loanedBooksTableCol.setCellFactory(column -> new BorrowedBooksCell(bookServices, readerServices));
 
         readerTable.setItems(FXCollections.observableArrayList(readerServices.getReaders()));
     }
@@ -62,8 +60,8 @@ public class ReadersController {
         if (!readerName.trim().isEmpty() && !email.trim().isEmpty() && !address.trim().isEmpty()) {
             Reader newReader = new Reader(readerName, email, address);
             readerServices.addReader(newReader);
-            fileHandler.saveReadersToFile(library.getReaderServices().getReaders());
-            updateReadersList();
+            readerServices.saveReaders();
+            loadReadersList();
             nameField.clear();
             emailField.clear();
             addressField.clear();
@@ -77,20 +75,20 @@ public class ReadersController {
 
         if (reader != null) {
             readerServices.removeReader(reader);
-            fileHandler.saveReadersToFile(library.getReaderServices().getReaders());
-            updateReadersList();
+            readerServices.saveReaders();
+            loadReadersList();
         }
     }
 
     @FXML private void handleFindReader() {
         String name = findByNameField.getText();
-        if (!name.trim().isEmpty() && name != null && library.getReaderServices().findReaderByName(name) != null) {
-            Reader reader = library.getReaderServices().findReaderByName(name);
+        if (!name.trim().isEmpty() && name != null && readerServices.findReaderByName(name) != null) {
+            Reader reader = readerServices.findReaderByName(name);
             readerTable.getItems().clear();
             readerTable.getItems().add(reader);
             findByNameField.clear();
         } else if (name.isEmpty()) {
-            updateReadersList();
+            loadReadersList();
         } else {
             readerTable.getItems().clear();
         }
@@ -128,8 +126,8 @@ public class ReadersController {
                     updatedReader.setName(nameField.getText());
                     updatedReader.setEmail(emailField.getText());
                     updatedReader.setAddress(addressField.getText());
-                    library.getReaderServices().updateReader(updatedReader);
-                    updateReadersList();
+                    readerServices.updateReader(updatedReader);
+                    loadReadersList();
                     return updatedReader;
                 }
                 return null;
@@ -147,9 +145,9 @@ public class ReadersController {
             AlertUtils.showErrorAlert("Error during loan", "Reader has already the maximum number of books loaned!");
             return;
         }
-        List<Book> avilableBooks = library.getBookServices().getAvilableBooks();
-        List<String> booksTitle = avilableBooks.stream().map(Book::getTitle).toList();
-        if (avilableBooks.isEmpty()) {
+        List<Book> availableBooks = bookServices.getAvilableBooks();
+        List<String> booksTitle = availableBooks.stream().map(Book::getTitle).toList();
+        if (availableBooks.isEmpty()) {
             System.out.println("No available books");
             return;
         }
@@ -161,29 +159,29 @@ public class ReadersController {
 
         Optional<String> result = dialog.showAndWait();
         if (result.isPresent()) {
-            Book selectedbook = library.getBookServices().findBookByTitle(result.get());
-            library.getReaderServices().loanBook(selectedbook, reader);
-            fileHandler.saveReadersToFile(library.getReaderServices().getReaders());
-            fileHandler.saveBooksToFile(library.getBookServices().getBooks());
-            updateReadersList();
+            Book selectedbook = bookServices.findBookByTitle(result.get());
+            readerServices.loanBook(selectedbook, reader);
+            readerServices.saveReaders();
+            bookServices.saveBooks();
+            loadReadersList();
         };
     }
 
     @FXML private void findReaderByLoanedBook() {
         String bookTitle = findByLoanedBookField.getText();
-        Book book = library.getBookServices().findBookByTitle(bookTitle);
+        Book book = bookServices.findBookByTitle(bookTitle);
         if (book == null) {
-            updateReadersList();
+            loadReadersList();
             return;
         }
-        Reader reader = library.getReaderServices().findReaderByLoanedBook(book);
+        Reader reader = readerServices.findReaderByLoanedBook(book);
 
         if (reader != null && !bookTitle.trim().isEmpty() && bookTitle != null) {
             readerTable.getItems().clear();
             readerTable.getItems().add(reader);
             findByLoanedBookField.clear();
         } else if (bookTitle.isEmpty()) {
-            updateReadersList();
+            loadReadersList();
         } else {
             readerTable.getItems().clear();
         }
@@ -193,16 +191,16 @@ public class ReadersController {
         private final ComboBox<String> comboBox = new ComboBox<>();
         private final Button returnButton = new Button("Return");
 
-        public BorrowedBooksCell(Library library) {
+        public BorrowedBooksCell(BookServices bookServices, ReaderServices readerServices) {
             comboBox.setPrefHeight(20);
             comboBox.setPromptText("Borrowed Books");
 
             returnButton.setOnAction(event -> {
-                Book selectedBook = library.getBookServices().findBookByTitle(comboBox.getValue());
+                Book selectedBook = bookServices.findBookByTitle(comboBox.getValue());
                 if (selectedBook != null) {
                     Reader reader = getTableView().getItems().get(getIndex());
-                    library.getReaderServices().returnLoanedBook(selectedBook, reader);
-                    library.getBookServices().makeBookAvilable(selectedBook);
+                    readerServices.returnLoanedBook(selectedBook, reader);
+                    bookServices.makeBookAvilable(selectedBook);
                     comboBox.getItems().remove(selectedBook);
                     comboBox.setValue(null);
 

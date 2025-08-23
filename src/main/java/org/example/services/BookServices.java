@@ -2,10 +2,8 @@ package org.example.services;
 
 import org.example.models.Book;
 import org.example.models.Genre;
-import org.example.models.Library;
-import org.example.models.Reader;
 import org.example.utils.AlertUtils;
-import org.example.utils.FileHandler;
+import org.example.utils.BinaryFileHandler;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -14,44 +12,40 @@ import java.util.stream.Collectors;
 
 public class BookServices {
     private List<Book> books;
-    private FileHandler fileHandler;
+    private final BinaryFileHandler binaryFileHandler;
 
-    public BookServices(FileHandler fileHandler) {
-        this.fileHandler = fileHandler;
-        this.books = fileHandler.loadBooksFromFile();
+    public BookServices(BinaryFileHandler binaryFileHandler) {
+        this.binaryFileHandler = binaryFileHandler;
+        this.books = binaryFileHandler.loadContent("data/books_data.ser", Book.class);
     }
 
     public void addBook(Book book) {
         books.add(book);
     }
 
+    public void saveBooks() {
+        binaryFileHandler.save("data/books_data.ser", books, Book.class);
+    }
+
     public void removeBook(Book book) {
-        if (book.isLoaned() == true) {
+        if (book.isLoaned()) {
             AlertUtils.showErrorAlert("Error during book removal", "Cant remove book that is loaned!");
             return;
         }
         books.remove(book);
     }
 
-    public List<Book> getBooks() {
-        return books;
-    }
-
-    public void setBooks(List<Book> books) {
-        this.books = books;
-    }
-
     public void updateBook(Book updatedBook) {
         for (int i = 0; i < books.size(); i++) {
             if (books.get(i).getId().equals(updatedBook.getId())) {
-                fileHandler.saveBooksToFile(books);
+                binaryFileHandler.save("data/books_data.ser", books, Book.class);
             }
         }
     }
 
     public void makeBookAvilable(Book book) {
         book.returnBook();
-        fileHandler.saveBooksToFile(books);
+        binaryFileHandler.save("data/books_data.ser", books, Book.class);
     }
 
     public List<Book> getAvilableBooks() {
@@ -95,5 +89,9 @@ public class BookServices {
 
     public List<Book> sortByAuthor() {
         return getBooks().stream().sorted(Comparator.comparing(Book::getAuthor)).toList();
+    }
+
+    public List<Book> getBooks() {
+        return books;
     }
 }
