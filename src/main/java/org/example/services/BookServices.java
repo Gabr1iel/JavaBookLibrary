@@ -5,13 +5,11 @@ import org.example.models.Genre;
 import org.example.utils.AlertUtils;
 import org.example.utils.BinaryFileHandler;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class BookServices {
-    private List<Book> books;
+    private HashMap<String, Book> books;
     private final BinaryFileHandler binaryFileHandler;
 
     public BookServices(BinaryFileHandler binaryFileHandler) {
@@ -20,7 +18,7 @@ public class BookServices {
     }
 
     public void addBook(Book book) {
-        books.add(book);
+        books.put(book.getId(), book);
     }
 
     public void saveBooks() {
@@ -32,28 +30,26 @@ public class BookServices {
             AlertUtils.showErrorAlert("Error during book removal", "Cant remove book that is loaned!");
             return;
         }
-        books.remove(book);
+        books.remove(book.getId());
     }
 
     public void updateBook(Book updatedBook) {
-        for (int i = 0; i < books.size(); i++) {
-            if (books.get(i).getId().equals(updatedBook.getId())) {
-                binaryFileHandler.save("data/books_data.ser", books, Book.class);
-            }
+        if (books.containsKey(updatedBook.getId())) {
+            saveBooks();
         }
     }
 
-    public void makeBookAvilable(Book book) {
+    public void makeBookAvailable(Book book) {
         book.returnBook();
-        binaryFileHandler.save("data/books_data.ser", books, Book.class);
+        saveBooks();
     }
 
-    public List<Book> getAvilableBooks() {
-        return books.stream().filter(book -> !book.isLoaned()).collect(Collectors.toList());
+    public List<Book> getAvailableBooks() {
+        return books.values().stream().filter(book -> !book.isLoaned()).collect(Collectors.toList());
     }
 
     public Book findBookByTitle(String bookTitle) {
-        for (Book book : getBooks()) {
+        for (Book book : getBooks().values()) {
             if (book.getTitle().equals(bookTitle)) {
                 System.out.println("Knížka: " + book.getTitle());
                 return book;
@@ -62,36 +58,25 @@ public class BookServices {
         return null;
     }
 
-    public List<Book> findBookByAuthor(String bookAuthor, List<Book> books) {
-        return books.stream()
-                .filter(book -> book.getAuthor().equals(bookAuthor)).toList();
+    public Map<String, Book> findBookByAuthor(String bookAuthor, HashMap<String, Book> books) {
+        return books.values().stream()
+                .filter(book -> book.getAuthor().equals(bookAuthor))
+                .collect(Collectors.toMap(
+                        Book::getId,
+                        book -> book
+                ));
     }
 
-    public List<Book> findBookByGenre(String bookGenre, List<Book> books) {
-        System.out.println(books);
-        List<Book> filteredBooks = new ArrayList<>();
-        for (Book book : books) {
-            List<Genre> genres = book.getBookGenres();
-            for (Genre genre : genres) {
-                System.out.println(genre.getTitle());
-                if (genre.getTitle().equals(bookGenre)) {
-                    filteredBooks.add(book);
-                }
-            }
-        }
-        System.out.println(filteredBooks);
-        return filteredBooks;
+    public Map<String, Book> findBookByGenre(String bookGenre, HashMap<String, Book> books) {
+        return books.values().stream()
+                .filter(book -> book.getBookGenres().stream().map(Genre::getTitle).toList().contains(bookGenre))
+                .collect(Collectors.toMap(
+                        Book::getId,
+                        book -> book
+                ));
     }
 
-    public List<Book> sortByTitle() {
-        return getBooks().stream().sorted(Comparator.comparing(Book::getTitle)).toList();
-    }
-
-    public List<Book> sortByAuthor() {
-        return getBooks().stream().sorted(Comparator.comparing(Book::getAuthor)).toList();
-    }
-
-    public List<Book> getBooks() {
+    public HashMap<String, Book> getBooks() {
         return books;
     }
 }

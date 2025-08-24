@@ -14,7 +14,9 @@ import org.example.services.GenreServices;
 import org.example.utils.AlertUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class BooksController {
@@ -44,7 +46,7 @@ public class BooksController {
     }
 
     private void generateGenreBox() {
-        genreComboBox.setItems(FXCollections.observableArrayList(genreServices.getGenres()));
+        genreComboBox.setItems(FXCollections.observableArrayList(genreServices.getGenres().values()));
         genreComboBox.setCellFactory(lc -> new ListCell<Genre>() {
             @Override
             protected void updateItem(Genre genre, boolean empty) {
@@ -100,7 +102,7 @@ public class BooksController {
             }
         });
 
-        bookTableView.setItems(FXCollections.observableArrayList(bookServices.getBooks()));
+        bookTableView.setItems(FXCollections.observableArrayList(bookServices.getBooks().values()));
     }
 
     @FXML public void initialize() {
@@ -143,24 +145,24 @@ public class BooksController {
         String title = bookTitleFilterField.getText();
         String author = bookAuthorFilterField.getText();
         String genre = bookGenreFilterField.getText();
-        List<Book> filteredBooks = new ArrayList<>();
+        HashMap<String, Book> filteredBooks = new HashMap<>();
 
         if (title != null && !title.trim().isEmpty()) {
-            filteredBooks.add(bookServices.findBookByTitle(title));
+            filteredBooks.put(bookServices.findBookByTitle(title).getId(), bookServices.findBookByTitle(title));
         }
         if (filteredBooks.isEmpty() && author != null) {
-            filteredBooks = new ArrayList<>(bookServices.findBookByAuthor(author, bookServices.getBooks()));
+            filteredBooks = new HashMap<>(bookServices.findBookByAuthor(author, bookServices.getBooks()));
         }
         if (filteredBooks.isEmpty() && genre != null) {
-            filteredBooks = new ArrayList<>(bookServices.findBookByGenre(genre, bookServices.getBooks()));
+            filteredBooks = new HashMap<>(bookServices.findBookByGenre(genre, bookServices.getBooks()));
         }
         if (!filteredBooks.isEmpty() && genre != null && !genre.trim().isEmpty()) {
-            filteredBooks = new ArrayList<>(bookServices.findBookByGenre(genre, filteredBooks));
+            filteredBooks = new HashMap<>(bookServices.findBookByGenre(genre, filteredBooks));
         }
 
         if ((title != null && !title.isEmpty()) || (author != null && !author.isEmpty()) || (genre != null && !genre.isEmpty())) {
             bookTableView.getItems().clear();
-            bookTableView.getItems().addAll(filteredBooks);
+            bookTableView.getItems().addAll(filteredBooks.values());
         } else if((title == null || title.isEmpty()) && (author == null || author.isEmpty()) && (genre == null || genre.isEmpty())) {
             loadBookList();
         } else {
@@ -188,7 +190,7 @@ public class BooksController {
             TextField authorField = new TextField(updatedBook.getAuthor());
             TextField publishDateField = new TextField(updatedBook.getReleaseDate());
             ComboBox<Genre> genreComboBox = new ComboBox<>();
-            genreComboBox.setItems(FXCollections.observableArrayList(genreServices.getGenres()));
+            genreComboBox.setItems(FXCollections.observableArrayList(genreServices.getGenres().values()));
             genreComboBox.setCellFactory(lc -> new ListCell<Genre>() {
                 @Override
                 protected void updateItem(Genre genre, boolean empty) {

@@ -4,10 +4,11 @@ import org.example.models.Genre;
 import org.example.utils.BinaryFileHandler;
 import org.example.utils.FileHandler;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class GenreServices {
-    private List<Genre> genres;
+    private HashMap<String, Genre> genres;
     private final BinaryFileHandler binaryFileHandler;
 
     public GenreServices(BinaryFileHandler binaryFileHandler) {
@@ -16,7 +17,7 @@ public class GenreServices {
     }
 
     public void addGenre(Genre genre) {
-        genres.add(genre);
+        genres.put(genre.getId(), genre);
     }
 
     public void saveGenres() {
@@ -24,27 +25,21 @@ public class GenreServices {
     }
 
     public void removeGenre(Genre genre) {
-        genres.remove(genre);
+        genres.remove(genre.getId());
     }
 
     public Genre getGenreByTitle(String title) {
-        for (Genre genre : genres) {
-            if (genre.getTitle().equals(title)) {
-                return genre;
-            }
-        }
-        return null;
+        return genres.values().stream()
+                .filter(genre -> genre.getTitle().equals(title)).findFirst().orElse(null);
     }
 
     public void editGenre(Genre genre) {
-        for (int i = 0; i < genres.size(); i++) {
-            if (genres.get(i).getId().equals(genre.getId())) {
-                saveGenres();
-            }
+        if (genres.containsKey(genre.getId())) {
+            saveGenres();
         }
     }
 
-    public List<Genre> getGenres() {
+    public HashMap<String, Genre> getGenres() {
         return genres;
     }
 }

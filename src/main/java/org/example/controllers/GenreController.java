@@ -22,7 +22,7 @@ public class GenreController {
     }
 
     public void updateGenresList() {
-        ObservableList<String> genresList = FXCollections.observableArrayList(genreServices.getGenres().stream().map(Genre::getTitle).toList());
+        ObservableList<String> genresList = FXCollections.observableArrayList(genreServices.getGenres().values().stream().map(Genre::getTitle).toList());
         genreListView.setItems(genresList);
     }
 

@@ -50,11 +50,7 @@ public class ReadersController {
         loanedBooksTableCol.setCellValueFactory(new PropertyValueFactory<>("borrowedBooks"));
         loanedBooksTableCol.setCellFactory(column -> new BorrowedBooksCell(bookServices, readerServices));
 
-        readerTable.setItems(FXCollections.observableArrayList(readerServices.getReaders()));
-
-            for (Reader reader : readerServices.getReaders()) {
-                System.out.println(reader.getBorrowedBooks());
-            }
+        readerTable.setItems(FXCollections.observableArrayList(readerServices.getReaders().values()));
     }
 
     @FXML private void handleAddReader() {
@@ -150,7 +146,7 @@ public class ReadersController {
             AlertUtils.showErrorAlert("Error during loan", "Reader has already the maximum number of books loaned!");
             return;
         }
-        List<Book> availableBooks = bookServices.getAvilableBooks();
+        List<Book> availableBooks = bookServices.getAvailableBooks();
         List<String> booksTitle = availableBooks.stream().map(Book::getTitle).toList();
         if (availableBooks.isEmpty()) {
             System.out.println("No available books");
@@ -204,9 +200,8 @@ public class ReadersController {
                 Book selectedBook = bookServices.findBookByTitle(comboBox.getValue());
                 if (selectedBook != null) {
                     Reader reader = readerServices.findReaderByLoanedBook(selectedBook);
-                    System.out.println("kniha" + selectedBook + "reader" + reader);
                     readerServices.returnLoanedBook(selectedBook, reader);
-                    bookServices.makeBookAvilable(selectedBook);
+                    bookServices.makeBookAvailable(selectedBook);
                     comboBox.getItems().remove(selectedBook);
                     comboBox.setValue(null);
 

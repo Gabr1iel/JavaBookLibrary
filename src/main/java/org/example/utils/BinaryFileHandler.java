@@ -2,11 +2,12 @@ package org.example.utils;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class BinaryFileHandler implements FileHandler {
     @Override
-    public <T> void save(String file, List<T> content, Class<T> clazz) {
+    public <K, V> void save(String file, HashMap<K, V> content, Class<V> clazz) {
         File directory = new File("data");
         if (!directory.exists()) {
             directory.mkdir();
@@ -25,19 +26,19 @@ public class BinaryFileHandler implements FileHandler {
     }
 
     @Override
-    public <T> List<T> loadContent(String file, Class<T> clazz) {
+    public <K, V> HashMap<K, V> loadContent(String file, Class<V> clazz) {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
-            List<?> content = (List<?>) ois.readObject();
+            HashMap<K, V> content = (HashMap<K, V>) ois.readObject();
 
-            for (Object obj : content) {
-                if (!clazz.isInstance(obj))
-                    throw new ClassCastException("Invalid type of class " + obj.getClass());
+            for (V value : content.values()) {
+                if (!clazz.isInstance(value))
+                    throw new ClassCastException("Invalid type of class " + value.getClass());
             }
             System.out.println(clazz.getSimpleName() + " were loaded successfully!");
-            return (List<T>) content;
+            return content;
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("Error during loading !" + clazz.getSimpleName() + e.getMessage());
-            return new ArrayList<>();
+            return new HashMap<>();
         }
     }
 }

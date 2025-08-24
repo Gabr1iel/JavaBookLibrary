@@ -58,8 +58,6 @@ public class Reader implements Serializable {
     }
 
     public void removeBook(Book book) {
-        System.out.println(book.getTitle());
         borrowedBooks.remove(book.getId());
-        System.out.println("Smazáno");
     }
 }

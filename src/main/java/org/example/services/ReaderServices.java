@@ -7,11 +7,12 @@ import org.example.utils.AlertUtils;
 import org.example.utils.BinaryFileHandler;
 import org.example.utils.FileHandler;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class ReaderServices {
     private final BinaryFileHandler binaryFileHandler;
-    private List<Reader> readers;
+    private HashMap<String, Reader> readers;
 
     public ReaderServices(BinaryFileHandler binaryFileHandler) {
         this.binaryFileHandler = binaryFileHandler;
@@ -19,7 +20,7 @@ public class ReaderServices {
     }
 
     public void addReader(Reader reader) {
-        readers.add(reader);
+        readers.put(reader.getId(), reader);
     }
 
     public void saveReaders() {
@@ -31,14 +32,12 @@ public class ReaderServices {
             AlertUtils.showErrorAlert("Error during reader removal", "Cant delete reader with loaned books!");
             return;
         }
-        readers.remove(reader);
+        readers.remove(reader.getId());
     }
 
     public void updateReader(Reader reader) {
-        for (Reader r : readers) {
-            if (r.getId().equals(reader.getId())) {
-                saveReaders();
-            }
+        if (readers.containsKey(reader.getId())) {
+            saveReaders();
         }
     }
 
@@ -51,36 +50,21 @@ public class ReaderServices {
 
     public void returnLoanedBook(Book book, Reader reader) {
         if (book != null) {
-            System.out.println(book.getTitle() + reader.getName());
             reader.removeBook(book);
-            System.out.println("Tady jsme taky");
             saveReaders();
         }
     }
 
     public Reader findReaderByName(String name) {
-        for (Reader reader : readers) {
-            if (reader.getName().equals(name)) {
-                return reader;
-            }
-        }
-        return null;
+        return readers.values().stream().filter(reader -> reader.getName().equals(name)).findFirst().orElse(null);
     }
 
     public Reader findReaderByLoanedBook(Book book) {
-        for (Reader reader : readers) {
-            if (reader.getBorrowedBooks().containsKey(book.getId())) {
-                return reader;
-            }
-        }
-        return null;
+        return readers.values().stream()
+                .filter(reader -> reader.getBorrowedBooks().containsKey(book.getId())).findFirst().orElse(null);
     }
 
-    public List<Reader> getReaders() {
+    public HashMap<String, Reader> getReaders() {
         return readers;
-    }
-
-    public void setReaders(List<Reader> readers) {
-        this.readers = readers;
     }
 }
