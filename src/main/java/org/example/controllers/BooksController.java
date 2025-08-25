@@ -190,21 +190,8 @@ public class BooksController {
             TextField authorField = new TextField(updatedBook.getAuthor());
             TextField publishDateField = new TextField(updatedBook.getReleaseDate());
             ComboBox<Genre> genreComboBox = new ComboBox<>();
-            genreComboBox.setItems(FXCollections.observableArrayList(genreServices.getGenres().values()));
-            genreComboBox.setCellFactory(lc -> new ListCell<Genre>() {
-                @Override
-                protected void updateItem(Genre genre, boolean empty) {
-                    super.updateItem(genre, empty);
-                    setText((genre == null || empty) ? null : genre.getTitle());
-                }
-            });
-            genreComboBox.setButtonCell(new ListCell<Genre>() {
-                @Override
-                protected void updateItem(Genre genre, boolean empty) {
-                    super.updateItem(genre, empty);
-                    setText((genre == null || empty) ? null : genre.getTitle());
-                }
-            });
+
+            generateGenreBox();
             genreComboBox.setConverter(new StringConverter<Genre>() {
                 @Override
                 public String toString(Genre genre) {
