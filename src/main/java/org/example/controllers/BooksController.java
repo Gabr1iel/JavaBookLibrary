@@ -77,7 +77,7 @@ public class BooksController {
                 } else {
                     Book book = getTableRow().getItem();
                     if (book.getBookGenres() != null && book.getBookGenres().size() > 0) {
-                        setText(book.getBookGenres().stream().map(genre -> genre.getTitle()).collect(Collectors.joining(", ")));
+                        setText(book.getBookGenres().stream().collect(Collectors.joining(", ")));
                     } else {
                         setText("Null");
                     }
@@ -115,8 +115,8 @@ public class BooksController {
         String bookAuthor = bookAuthorField.getText();
         String bookPublishDate = bookPublishDateField.getText();
         Genre bookGenre = genreComboBox.getValue();
-        List<Genre> bookGenres = new ArrayList<>();
-        bookGenres.add(bookGenre);
+        List<String> bookGenres = new ArrayList<>();
+        bookGenres.add(bookGenre.getTitle());
         if (!bookTitle.trim().isEmpty() && !bookAuthor.trim().isEmpty() && !bookPublishDate.trim().isEmpty() && bookGenre != null) {
             Book newBook = new Book(bookTitle, bookAuthor, bookPublishDate, bookGenres);
             bookServices.addBook(newBook);
@@ -172,7 +172,7 @@ public class BooksController {
 
     @FXML private void handleUpdateBook() {
         Book updatedBook = bookTableView.getSelectionModel().getSelectedItem();
-        List<Genre> bookGenres = new ArrayList<>();
+        List<String> bookGenres = new ArrayList<>();
         if (updatedBook != null) {
             Dialog<Book> dialog = new Dialog<>();
             dialog.setTitle("Update Book");
@@ -203,7 +203,7 @@ public class BooksController {
                     return new Genre(string);
                 }
             });
-            genreComboBox.setValue(updatedBook.getBookGenres().getFirst());
+            genreComboBox.setValue(genreServices.getGenreByTitle(updatedBook.getBookGenres().getFirst()));
 
             grid.add(new Label("Title"), 0, 0);
             grid.add(titleField, 1, 0);
@@ -221,7 +221,7 @@ public class BooksController {
                     updatedBook.setTitle(titleField.getText());
                     updatedBook.setAuthor(authorField.getText());
                     updatedBook.setReleaseDate(publishDateField.getText());
-                    bookGenres.add(genreComboBox.getValue());
+                    bookGenres.add(genreComboBox.getValue().getTitle());
                     updatedBook.setBookGenres(bookGenres);
                     bookServices.updateBook(updatedBook);
                     loadBookList();

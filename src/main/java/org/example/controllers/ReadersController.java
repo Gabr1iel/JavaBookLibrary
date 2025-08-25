@@ -14,6 +14,7 @@ import org.example.services.ReaderServices;
 import org.example.utils.AlertUtils;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,7 +31,7 @@ public class ReadersController {
     @FXML private TableColumn<Reader, String> nameTableCol;
     @FXML private TableColumn<Reader, String> emailTableCol;
     @FXML private TableColumn<Reader, String> addressTableCol;
-    @FXML private TableColumn<Reader, HashMap<String, Book>> loanedBooksTableCol;
+    @FXML private TableColumn<Reader, HashSet<String>> loanedBooksTableCol;
 
 
     public void setReaderController(ReaderServices readerServices, BookServices bookServices) {
@@ -188,7 +189,7 @@ public class ReadersController {
         }
     }
 
-    private static class BorrowedBooksCell extends TableCell<Reader, HashMap<String, Book>> {
+    private static class BorrowedBooksCell extends TableCell<Reader, HashSet<String>> {
         private final ComboBox<String> comboBox = new ComboBox<>();
         private final Button returnButton = new Button("Return");
 
@@ -213,14 +214,13 @@ public class ReadersController {
         }
 
         @Override
-        protected void updateItem(HashMap<String, Book> books, boolean empty) {
+        protected void updateItem(HashSet<String> books, boolean empty) {
             super.updateItem(books, empty);
 
             if (empty || books == null || books.isEmpty()) {
                 setGraphic(null);
             } else {
-                List<String> bookTitles = books.values().stream().map(Book::getTitle).toList();
-                comboBox.getItems().setAll(bookTitles);
+                comboBox.getItems().setAll(books);
                 setGraphic(new HBox(5, comboBox, returnButton));
             }
         }

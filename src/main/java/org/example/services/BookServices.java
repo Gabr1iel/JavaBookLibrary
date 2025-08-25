@@ -69,7 +69,7 @@ public class BookServices {
 
     public Map<String, Book> findBookByGenre(String bookGenre, HashMap<String, Book> books) {
         return books.values().stream()
-                .filter(book -> book.getBookGenres().stream().map(Genre::getTitle).toList().contains(bookGenre))
+                .filter(book -> book.getBookGenres().stream().toList().contains(bookGenre))
                 .collect(Collectors.toMap(
                         Book::getId,
                         book -> book

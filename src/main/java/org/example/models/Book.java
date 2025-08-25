@@ -10,10 +10,10 @@ public class Book implements Serializable {
     private String title;
     private String author;
     private String releaseDate;
-    private List<Genre> bookGenres;
+    private List<String> bookGenres;
     private boolean isLoaned = false;
 
-    public Book(String title, String author, String releaseDate, List<Genre> bookGenres) {
+    public Book(String title, String author, String releaseDate, List<String> bookGenres) {
         this.title = title;
         this.author = author;
         this.releaseDate = releaseDate;
@@ -56,11 +56,11 @@ public class Book implements Serializable {
         return Id;
     }
 
-    public List<Genre> getBookGenres() {
+    public List<String> getBookGenres() {
         return bookGenres;
     }
 
-    public void setBookGenres(List<Genre> bookGenres) {
+    public void setBookGenres(List<String> bookGenres) {
         this.bookGenres = bookGenres;
     }
 

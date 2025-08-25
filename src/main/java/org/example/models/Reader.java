@@ -1,10 +1,7 @@
 package org.example.models;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class Reader implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -12,13 +9,13 @@ public class Reader implements Serializable {
     private String name;
     private String email;
     private String address;
-    private final HashMap<String, Book> borrowedBooks;
+    private final HashSet<String> borrowedBooks;
 
     public Reader(String name, String email, String address) {
         this.name = name;
         this.email = email;
         this.address = address;
-        this.borrowedBooks = new HashMap<>();
+        this.borrowedBooks = new HashSet<>();
     }
 
     public String getName() {
@@ -45,7 +42,7 @@ public class Reader implements Serializable {
         this.address = address;
     }
 
-    public HashMap<String, Book> getBorrowedBooks() {
+    public HashSet<String> getBorrowedBooks() {
         return borrowedBooks;
     }
 
@@ -54,10 +51,10 @@ public class Reader implements Serializable {
     }
 
     public void addBook(Book book) {
-        borrowedBooks.put(book.getId(), book);
+        borrowedBooks.add(book.getTitle());
     }
 
     public void removeBook(Book book) {
-        borrowedBooks.remove(book.getId());
+        borrowedBooks.remove(book.getTitle());
     }
 }

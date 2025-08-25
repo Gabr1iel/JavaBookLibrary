@@ -61,7 +61,7 @@ public class ReaderServices {
 
     public Reader findReaderByLoanedBook(Book book) {
         return readers.values().stream()
-                .filter(reader -> reader.getBorrowedBooks().containsKey(book.getId())).findFirst().orElse(null);
+                .filter(reader -> reader.getBorrowedBooks().contains(book.getTitle())).findFirst().orElse(null);
     }
 
     public HashMap<String, Reader> getReaders() {
