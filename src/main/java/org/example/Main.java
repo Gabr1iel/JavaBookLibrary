@@ -5,12 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.example.controllers.MainViewController;
-import org.example.services.BookServices;
-import org.example.services.GenreServices;
-import org.example.services.ReaderServices;
-import org.example.utils.BinaryFileHandler;
-import org.example.utils.FileHandler;
+import org.example.ui.controllers.MainViewController;
 
 import java.io.IOException;
 

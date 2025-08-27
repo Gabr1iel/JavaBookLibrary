@@ -1,4 +1,4 @@
-package org.example.utils;
+package org.example.ui.controllers;
 
 public interface EditController<S, M> {
     void setService(S modelService);

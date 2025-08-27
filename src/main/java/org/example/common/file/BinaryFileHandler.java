@@ -1,9 +1,7 @@
-package org.example.utils;
+package org.example.common.file;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class BinaryFileHandler implements FileHandler {
     @Override

@@ -1,14 +1,10 @@
-package org.example.services;
+package org.example.reader;
 
-import javafx.scene.control.Alert;
-import org.example.models.Book;
-import org.example.models.Reader;
-import org.example.utils.AlertUtils;
-import org.example.utils.BinaryFileHandler;
-import org.example.utils.FileHandler;
+import org.example.book.Book;
+import org.example.ui.alerts.AlertUtils;
+import org.example.common.file.BinaryFileHandler;
 
 import java.util.HashMap;
-import java.util.List;
 
 public class ReaderServices {
     private final BinaryFileHandler binaryFileHandler;

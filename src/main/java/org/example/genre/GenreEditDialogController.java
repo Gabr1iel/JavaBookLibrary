@@ -1,10 +1,8 @@
-package org.example.controllers;
+package org.example.genre;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
-import org.example.models.Genre;
-import org.example.services.GenreServices;
-import org.example.utils.EditController;
+import org.example.ui.controllers.EditController;
 
 public class GenreEditDialogController implements EditController<GenreServices, Genre> {
     GenreServices genreServices;

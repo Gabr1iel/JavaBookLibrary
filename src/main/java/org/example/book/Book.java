@@ -1,4 +1,4 @@
-package org.example.models;
+package org.example.book;
 
 import java.io.Serializable;
 import java.util.List;

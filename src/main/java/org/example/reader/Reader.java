@@ -1,4 +1,6 @@
-package org.example.models;
+package org.example.reader;
+
+import org.example.book.Book;
 
 import java.io.Serializable;
 import java.util.*;

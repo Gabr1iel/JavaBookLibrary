@@ -1,9 +1,7 @@
-package org.example.services;
+package org.example.book;
 
-import org.example.models.Book;
-import org.example.models.Genre;
-import org.example.utils.AlertUtils;
-import org.example.utils.BinaryFileHandler;
+import org.example.ui.alerts.AlertUtils;
+import org.example.common.file.BinaryFileHandler;
 
 import java.util.*;
 import java.util.stream.Collectors;

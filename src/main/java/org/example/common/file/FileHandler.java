@@ -1,7 +1,6 @@
-package org.example.utils;
+package org.example.common.file;
 
 import java.util.HashMap;
-import java.util.List;
 
 public interface FileHandler {
     <K, V> void save(String file, HashMap<K, V> content, Class<V> clazz);

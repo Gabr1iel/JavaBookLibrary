@@ -1,10 +1,11 @@
-package org.example.utils;
+package org.example.ui.dialogs;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
+import org.example.ui.controllers.EditController;
 
 public final class CreateDialog {
     public CreateDialog() {}

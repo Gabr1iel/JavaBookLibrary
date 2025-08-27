@@ -1,12 +1,10 @@
-package org.example.controllers;
+package org.example.genre;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import org.example.models.Genre;
-import org.example.services.GenreServices;
-import org.example.utils.CreateDialog;
+import org.example.ui.dialogs.CreateDialog;
 
 public class GenreController {
     GenreServices genreServices;

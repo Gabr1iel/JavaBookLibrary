@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 10" xmlns:fx="http://javafx.com/fxml" fx:controller="org.example.controllers.GenreController" >
+<VBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 10" xmlns:fx="http://javafx.com/fxml" fx:controller="org.example.genre.GenreController" >
     <Label text="Genres" style="-fx-font-size: 24"/>
     <HBox spacing="10" alignment="CENTER_LEFT">
         <TextField fx:id="genreTitleField" promptText="Genre title"/>

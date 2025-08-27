@@ -1,4 +1,4 @@
-package org.example.models;
+package org.example.genre;
 
 import java.io.Serializable;
 import java.util.UUID;

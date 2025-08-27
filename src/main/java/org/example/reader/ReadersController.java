@@ -1,4 +1,4 @@
-package org.example.controllers;
+package org.example.reader;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -7,13 +7,10 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import org.example.models.Book;
-import org.example.models.Reader;
-import org.example.services.BookServices;
-import org.example.services.ReaderServices;
-import org.example.utils.AlertUtils;
+import org.example.book.Book;
+import org.example.book.BookServices;
+import org.example.ui.alerts.AlertUtils;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;

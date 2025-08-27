@@ -1,13 +1,16 @@
-package org.example.controllers;
+package org.example.ui.controllers;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import org.example.services.BookServices;
-import org.example.services.GenreServices;
-import org.example.services.ReaderServices;
-import org.example.utils.BinaryFileHandler;
+import org.example.book.BooksController;
+import org.example.book.BookServices;
+import org.example.genre.GenreController;
+import org.example.reader.ReadersController;
+import org.example.genre.GenreServices;
+import org.example.reader.ReaderServices;
+import org.example.common.file.BinaryFileHandler;
 
 import java.io.IOException;
 

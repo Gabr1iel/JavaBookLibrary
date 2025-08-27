@@ -9,7 +9,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Button?>
 
-<VBox spacing="10" style="-fx-padding: 10px" alignment="CENTER_LEFT" xmlns:fx="http://javafx.com/fxml" fx:controller="org.example.controllers.ReadersController">
+<VBox spacing="10" style="-fx-padding: 10px" alignment="CENTER_LEFT" xmlns:fx="http://javafx.com/fxml" fx:controller="org.example.reader.ReadersController">
     <Label text="Readers" style="-fx-font-size: 24px"/>
     <HBox spacing="10" alignment="CENTER_LEFT">
         <TextField fx:id="nameField" promptText="Name"/>

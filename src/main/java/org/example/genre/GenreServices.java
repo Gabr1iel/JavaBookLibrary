@@ -1,7 +1,6 @@
-package org.example.services;
+package org.example.genre;
 
-import org.example.models.Genre;
-import org.example.utils.BinaryFileHandler;
+import org.example.common.file.BinaryFileHandler;
 
 import java.util.HashMap;
 

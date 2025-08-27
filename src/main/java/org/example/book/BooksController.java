@@ -1,4 +1,4 @@
-package org.example.controllers;
+package org.example.book;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -7,16 +7,13 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.util.StringConverter;
-import org.example.models.Book;
-import org.example.models.Genre;
-import org.example.services.BookServices;
-import org.example.services.GenreServices;
-import org.example.utils.AlertUtils;
+import org.example.genre.Genre;
+import org.example.genre.GenreServices;
+import org.example.ui.alerts.AlertUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class BooksController {
@@ -106,7 +103,6 @@ public class BooksController {
     }
 
     @FXML public void initialize() {
-        System.out.println("LibraryController byl inicializován!");
         bookTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 

@@ -1,4 +1,4 @@
-package org.example.utils;
+package org.example.ui.alerts;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
