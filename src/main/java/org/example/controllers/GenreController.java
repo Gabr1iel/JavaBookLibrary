@@ -3,11 +3,10 @@ package org.example.controllers;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
 import org.example.models.Genre;
 import org.example.services.GenreServices;
+import org.example.utils.CreateDialog;
 
 public class GenreController {
     GenreServices genreServices;
@@ -28,23 +27,15 @@ public class GenreController {
 
     @FXML private void handleAddGenre() {
         String title = genreTitleField.getText();
-        if (!title.trim().isEmpty()) {
-            Genre genre = new Genre(title);
-            genreServices.addGenre(genre);
-            genreServices.saveGenres();
-            updateGenresList();
-            genreTitleField.clear();
-        }
+        genreServices.createGenre(title);
+        updateGenresList();
+        genreTitleField.clear();
     }
 
     @FXML private void handleRemoveGenre() {
         String title = genreListView.getSelectionModel().getSelectedItem();
-        if (!title.trim().isEmpty()) {
-            Genre genre = genreServices.getGenreByTitle(title);
-            genreServices.removeGenre(genre);
-            genreServices.saveGenres();
-            updateGenresList();
-        }
+        genreServices.deleteGenre(title);
+        updateGenresList();
     }
 
     @FXML private void handleFindGenre() {
@@ -63,36 +54,14 @@ public class GenreController {
     @FXML private void handleEditGenre() {
         String title = genreListView.getSelectionModel().getSelectedItem();
         if (!title.trim().isEmpty()) {
-            Genre genre = genreServices.getGenreByTitle(title);
-            Dialog<Genre> dialog = new Dialog<>();
-            dialog.setTitle("Edit Genre");
-            dialog.setHeaderText("Edit Genre");
+            Genre selectedGenre = genreServices.getGenreByTitle(title);
 
-            ButtonType saveBtn = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
-            dialog.getDialogPane().getButtonTypes().addAll(saveBtn, ButtonType.CANCEL);
-
-            GridPane grid = new GridPane();
-            grid.setHgap(10);
-            grid.setVgap(10);
-            grid.setPadding(new Insets(20, 150, 10, 10));
-
-            TextField genreTitleField = new TextField(genre.getTitle());
-
-            grid.add(new Label("Title"), 0, 0);
-            grid.add(genreTitleField, 1, 0);
-
-            dialog.getDialogPane().setContent(grid);
-
-            dialog.setResultConverter(dialogButton -> {
-                if (dialogButton == saveBtn) {
-                    genre.setTitle(genreTitleField.getText());
-                    genreServices.editGenre(genre);
-                    updateGenresList();
-                    return genre;
-                }
-                return null;
-            });
-            dialog.showAndWait();
+            try {
+                CreateDialog.showEditDialog("Edit Genre", "Edit Genre", "/org/example/views/edit-genre-view.fxml", genreServices, selectedGenre);
+                updateGenresList();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }
