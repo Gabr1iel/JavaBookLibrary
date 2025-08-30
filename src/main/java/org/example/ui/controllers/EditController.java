@@ -1,7 +1,7 @@
 package org.example.ui.controllers;
 
-public interface EditController<S, M> {
-    void setService(S modelService);
+public interface EditController<M, S> {
     void setModel(M model);
+    void setService(S modelService);
     void Edit();
 }
