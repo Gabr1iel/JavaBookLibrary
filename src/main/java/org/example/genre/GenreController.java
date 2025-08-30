@@ -32,8 +32,22 @@ public class GenreController {
 
     @FXML private void handleRemoveGenre() {
         String title = genreListView.getSelectionModel().getSelectedItem();
-        genreServices.deleteGenre(title);
+        genreServices.removeGenre(title);
         updateGenresList();
+    }
+
+    @FXML private void handleEditGenre() {
+        String title = genreListView.getSelectionModel().getSelectedItem();
+        if (!title.trim().isEmpty()) {
+            Genre selectedGenre = genreServices.getGenreByTitle(title);
+
+            try {
+                CreateDialog.showEditDialog("Edit Genre", "Edit Genre", "/org/example/views/edit-genre-view.fxml", selectedGenre, genreServices);
+                updateGenresList();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     @FXML private void handleFindGenre() {
@@ -46,20 +60,6 @@ public class GenreController {
             updateGenresList();
         } else {
             genreListView.getItems().clear();
-        }
-    }
-
-    @FXML private void handleEditGenre() {
-        String title = genreListView.getSelectionModel().getSelectedItem();
-        if (!title.trim().isEmpty()) {
-            Genre selectedGenre = genreServices.getGenreByTitle(title);
-
-            try {
-                CreateDialog.showEditDialog("Edit Genre", "Edit Genre", "/org/example/views/edit-genre-view.fxml", genreServices, selectedGenre);
-                updateGenresList();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
         }
     }
 }

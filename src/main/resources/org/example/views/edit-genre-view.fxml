@@ -9,6 +9,7 @@
     <padding>
         <Insets top="20" right="150" bottom="10" left="10"/>
     </padding>
+
     <Label text="Title" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
     <TextField fx:id="genreTitleField" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
 </GridPane>

@@ -5,7 +5,7 @@ import org.example.common.file.BinaryFileHandler;
 import java.util.HashMap;
 
 public class GenreServices {
-    private HashMap<String, Genre> genres;
+    private final HashMap<String, Genre> genres;
     private final BinaryFileHandler binaryFileHandler;
 
     public GenreServices(BinaryFileHandler binaryFileHandler) {
@@ -25,9 +25,15 @@ public class GenreServices {
         }
     }
 
-    public void deleteGenre(String title) {
+    public void removeGenre(String title) {
         if (!title.trim().isEmpty()) {
             genres.remove(getGenreByTitle(title).getId());
+            saveGenres();
+        }
+    }
+
+    public void editGenre(Genre genre) {
+        if (genres.containsKey(genre.getId())) {
             saveGenres();
         }
     }
@@ -35,12 +41,6 @@ public class GenreServices {
     public Genre getGenreByTitle(String title) {
         return genres.values().stream()
                 .filter(genre -> genre.getTitle().equals(title)).findFirst().orElse(null);
-    }
-
-    public void editGenre(Genre genre) {
-        if (genres.containsKey(genre.getId())) {
-            saveGenres();
-        }
     }
 
     public HashMap<String, Genre> getGenres() {
