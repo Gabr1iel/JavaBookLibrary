@@ -31,14 +31,14 @@ public class ReadersController {
     @FXML private TableColumn<Reader, HashSet<String>> loanedBooksTableCol;
 
 
+    @FXML public  void initialize() {
+        readerTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    }
+
     public void setReaderController(ReaderServices readerServices, BookServices bookServices) {
         this.readerServices = readerServices;
         this.bookServices = bookServices;
         loadReadersList();
-    }
-
-    @FXML public  void initialize() {
-        readerTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
     private void loadReadersList() {
@@ -199,7 +199,7 @@ public class ReadersController {
                 if (selectedBook != null) {
                     Reader reader = readerServices.findReaderByLoanedBook(selectedBook);
                     readerServices.returnLoanedBook(selectedBook, reader);
-                    bookServices.makeBookAvailable(selectedBook);
+                    selectedBook.returnBook();
                     comboBox.getItems().remove(selectedBook);
                     comboBox.setValue(null);
 

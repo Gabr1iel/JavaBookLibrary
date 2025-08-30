@@ -1,10 +1,12 @@
 package org.example.book;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
 public class Book implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
     private final String Id = UUID.randomUUID().toString();
     private String title;
@@ -48,10 +50,6 @@ public class Book implements Serializable {
         return isLoaned;
     }
 
-    public void setLoaned(boolean loaned) {
-        isLoaned = loaned;
-    }
-
     public String getId() {
         return Id;
     }
@@ -68,7 +66,7 @@ public class Book implements Serializable {
         if (!isLoaned) {
             isLoaned = true;
         } else {
-            System.out.println("Kniha je již zapůjčená");
+            System.out.println("Book is already loaned!");
         }
     }
 
@@ -76,7 +74,7 @@ public class Book implements Serializable {
         if (isLoaned) {
             isLoaned = false;
         } else {
-            System.out.println("Knihu momentálně nemá nikdo zapůjčenou");
+            System.out.println("This book is not loaned!");
         }
     }
 }

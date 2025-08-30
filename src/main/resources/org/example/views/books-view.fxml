@@ -23,7 +23,7 @@
             <TextField fx:id="bookTitleFilterField" promptText="Enter book title"/>
             <TextField fx:id="bookAuthorFilterField" promptText="Enter book author"/>
             <TextField fx:id="bookGenreFilterField" promptText="Enter genre"/>
-            <Button text="Search" onAction="#handleFindBook"/>
+            <Button text="Search" onAction="#handleFilterBooks"/>
         </HBox>
     </VBox>
     <TableView fx:id="bookTableView">
@@ -36,7 +36,7 @@
         </columns>
     </TableView>
     <HBox spacing="10" style="-fx-max-width: 800">
-        <Button text="Edit Book" onAction="#handleUpdateBook"/>
+        <Button text="Edit Book" onAction="#handleEditBook"/>
         <Button text="Remove Book" styleClass="delete-btn" onAction="#handleRemoveBook"/>
     </HBox>
 </VBox>

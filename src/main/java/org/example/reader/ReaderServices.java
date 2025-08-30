@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 public class ReaderServices {
     private final BinaryFileHandler binaryFileHandler;
-    private HashMap<String, Reader> readers;
+    private final HashMap<String, Reader> readers;
 
     public ReaderServices(BinaryFileHandler binaryFileHandler) {
         this.binaryFileHandler = binaryFileHandler;
