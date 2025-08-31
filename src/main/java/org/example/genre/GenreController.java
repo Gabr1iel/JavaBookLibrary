@@ -4,7 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import org.example.ui.dialogs.CreateDialog;
+import org.example.ui.dialogs.CreateEditDialog;
 
 public class GenreController {
     GenreServices genreServices;
@@ -42,7 +42,7 @@ public class GenreController {
             Genre selectedGenre = genreServices.getGenreByTitle(title);
 
             try {
-                CreateDialog.showEditDialog("Edit Genre", "Edit Genre", "/org/example/views/edit-genre-view.fxml", selectedGenre, genreServices);
+                new CreateEditDialog<>("Edit Genre", "Edit Genre", "/org/example/views/edit-genre-view.fxml", selectedGenre, genreServices).show();
                 updateGenresList();
             } catch (Exception e) {
                 throw new RuntimeException(e);

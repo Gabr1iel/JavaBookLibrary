@@ -8,13 +8,30 @@ import javafx.scene.control.Dialog;
 import org.example.ui.controllers.DualServiceEditController;
 import org.example.ui.controllers.EditController;
 
-import java.util.Optional;
+public final class CreateEditDialog<M, S, T> implements DialogUtil {
+    private final String title;
+    private final String headerTxt;
+    private final String fxmlPath;
+    private final M model;
+    private final S modelService;
+    private final T secondaryModelService;
 
-public final class CreateDialog {
-    public CreateDialog() {}
+    public CreateEditDialog(String title, String headerTxt, String fxmlPath, M model, S modelService) {
+        this(title, headerTxt, fxmlPath, model, modelService, null);
+    }
 
-    public static <M, S, T> void showEditDialog(String title, String headerTxt, String fxmlPath, M model, S modelService, T secondaryModelService) throws Exception {
-        FXMLLoader loader = new FXMLLoader(CreateDialog.class.getResource(fxmlPath));
+    public CreateEditDialog(String title, String headerTxt, String fxmlPath, M model, S modelService, T secondaryModelService) {
+        this.title = title;
+        this.headerTxt = headerTxt;
+        this.fxmlPath = fxmlPath;
+        this.model = model;
+        this.modelService = modelService;
+        this.secondaryModelService = secondaryModelService;
+    }
+
+    @Override
+    public void show() throws Exception {
+        FXMLLoader loader = new FXMLLoader(CreateEditDialog.class.getResource(fxmlPath));
         Parent content = loader.load();
         EditController<M, S> controller = loader.getController();
 
@@ -39,9 +56,5 @@ public final class CreateDialog {
         });
 
         dialog.showAndWait();
-    }
-
-    public static <M, S> void showEditDialog(String title, String headerTxt, String fxmlPath, M model, S modelService) throws Exception {
-        showEditDialog(title, headerTxt, fxmlPath, model, modelService, Optional.empty());
     }
 }

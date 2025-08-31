@@ -7,7 +7,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import org.example.genre.Genre;
 import org.example.genre.GenreServices;
 import org.example.ui.comboBox.CreateComboBox;
-import org.example.ui.dialogs.CreateDialog;
+import org.example.ui.dialogs.CreateEditDialog;
 import java.util.List;
 import java.util.Map;
 
@@ -98,6 +98,18 @@ public class BooksController {
         }
     }
 
+    @FXML private void handleEditBook() {
+        Book selectedBook = bookTableView.getSelectionModel().getSelectedItem();
+        if (selectedBook != null) {
+            try {
+                new CreateEditDialog<>("Update Book", "Change book information", "/org/example/views/edit-book-view.fxml", selectedBook, bookServices, genreServices).show();
+                loadBookList();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
     @FXML private void handleFilterBooks() {
         String title = bookTitleFilterField.getText();
         String author = bookAuthorFilterField.getText();
@@ -110,17 +122,5 @@ public class BooksController {
             loadBookList();
         else
             bookTableView.getItems().clear();
-    }
-
-    @FXML private void handleEditBook() {
-        Book selectedBook = bookTableView.getSelectionModel().getSelectedItem();
-        if (selectedBook != null) {
-            try {
-                CreateDialog.showEditDialog("Update Book", "Change book information", "/org/example/views/edit-book-view.fxml", selectedBook, bookServices, genreServices);
-                loadBookList();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
     }
 }
