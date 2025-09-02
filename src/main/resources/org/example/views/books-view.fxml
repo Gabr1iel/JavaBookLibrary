@@ -16,7 +16,7 @@
             <TextField fx:id="bookTitleField" promptText="Enter book title"/>
             <TextField fx:id="bookAuthorField" promptText="Enter book author"/>
             <TextField fx:id="bookPublishDateField" promptText="Enter publish date"/>
-            <ComboBox fx:id="genreComboBox" promptText="Genre"/>
+            <ComboBox fx:id="genreComboBox"/>
             <Button text="Add Book" onAction="#handleAddBook"/>
         </HBox>
         <HBox spacing="10" alignment="CENTER_LEFT">

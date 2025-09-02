@@ -30,8 +30,10 @@ public class BookServices {
     }
 
     public void removeBook(Book book) {
-        if (book.isLoaned())
+        if (book.isLoaned()) {
             AlertUtils.showErrorAlert("Error during book removal", "Cant remove book that is loaned!");
+            return;
+        }
         books.remove(book.getId());
         saveBooks();
     }

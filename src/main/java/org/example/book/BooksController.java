@@ -67,7 +67,7 @@ public class BooksController {
             }
         });
         bookTableView.setItems(FXCollections.observableArrayList(bookServices.getBooks().values()));
-        CreateComboBox.setupComboBox(genreComboBox, genreServices.getGenres().values(), Genre::getTitle);
+        CreateComboBox.setupComboBox("Genre", genreComboBox, genreServices.getGenres().values(), Genre::getTitle);
     }
 
     public void refreshBooksTable() {
@@ -87,7 +87,6 @@ public class BooksController {
         bookTitleField.clear();
         bookAuthorField.clear();
         bookPublishDateField.clear();
-        genreComboBox.setPromptText("Genre");
     }
 
     @FXML private void handleRemoveBook() {

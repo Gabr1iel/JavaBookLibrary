@@ -31,7 +31,7 @@ public class CreateChoiceDialog<T> implements DialogUtil<T> {
         dialog.setHeaderText(headerTxt);
         dialog.setContentText(contentTxt);
 
-        CreateComboBox.setupComboBox(comboBox, items, toStringFn);
+        CreateComboBox.setupComboBox("" ,comboBox, items, toStringFn);
 
         return dialog;
     }

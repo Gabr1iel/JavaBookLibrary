@@ -21,6 +21,7 @@ public class ReaderBooksTableCell extends TableCell<Reader, HashSet<String>> {
         returnButton.setOnAction(event -> {
             Book selectedBook = bookServices.findBookByTitle(comboBox.getValue());
             readerServices.returnLoanedBook(selectedBook);
+            bookServices.saveBooks();
             comboBox.getItems().remove(selectedBook.getTitle());
             getTableView().refresh();
         });

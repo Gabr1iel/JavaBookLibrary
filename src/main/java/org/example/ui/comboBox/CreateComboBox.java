@@ -9,7 +9,8 @@ import java.util.function.Function;
 public final class CreateComboBox {
     public CreateComboBox() {}
 
-    public static <M> void setupComboBox(ComboBox<M> comboBox, Collection<M> items, Function<M, String> toStringFn) {
+    public static <M> void setupComboBox(String prompt, ComboBox<M> comboBox, Collection<M> items, Function<M, String> toStringFn) {
+        comboBox.setPromptText(prompt);
         comboBox.setItems(FXCollections.observableArrayList(items));
         comboBox.setCellFactory(lc -> new ListCell<>() {
             @Override

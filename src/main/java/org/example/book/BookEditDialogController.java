@@ -42,7 +42,7 @@ public class BookEditDialogController implements DualServiceEditController<Book,
         bookAuthorField.setText(book.getAuthor());
         bookDateField.setText(book.getReleaseDate());
 
-        CreateComboBox.setupComboBox(bookGenreBox, genreService.getGenres().values(), Genre::getTitle);
+        CreateComboBox.setupComboBox("Genre", bookGenreBox, genreService.getGenres().values(), Genre::getTitle);
         bookGenreBox.setValue(genreService.getGenreByTitle(book.getBookGenres().getFirst()));
     }
 
