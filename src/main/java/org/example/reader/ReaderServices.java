@@ -75,7 +75,7 @@ public class ReaderServices {
     }
 
     public Reader findReaderByName(String name) {
-        return readers.values().stream().filter(reader -> reader.getName().equals(name)).findFirst().orElse(null);
+        return readers.values().stream().filter(reader -> reader.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
     }
 
     public Reader findReaderByLoanedBook(Book book) {

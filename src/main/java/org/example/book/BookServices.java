@@ -43,12 +43,12 @@ public class BookServices {
     }
 
     public Book findBookByTitle(String bookTitle) {
-        return books.values().stream().filter(b -> b.getTitle().equals(bookTitle)).findFirst().orElse(null);
+        return books.values().stream().filter(b -> b.getTitle().equalsIgnoreCase(bookTitle)).findFirst().orElse(null);
     }
 
     public Map<String, Book> findBookByAuthor(String bookAuthor, HashMap<String, Book> books) {
         return books.values().stream()
-                .filter(book -> book.getAuthor().equals(bookAuthor))
+                .filter(book -> book.getAuthor().equalsIgnoreCase(bookAuthor))
                 .collect(Collectors.toMap(
                         Book::getId,
                         book -> book
@@ -57,7 +57,7 @@ public class BookServices {
 
     public Map<String, Book> findBookByGenre(String bookGenre, HashMap<String, Book> books) {
         return books.values().stream()
-                .filter(book -> book.getBookGenres().stream().toList().contains(bookGenre))
+                .filter(book -> book.getBookGenres().stream().anyMatch(genre -> genre.equalsIgnoreCase(bookGenre)))
                 .collect(Collectors.toMap(
                         Book::getId,
                         book -> book

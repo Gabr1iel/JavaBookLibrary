@@ -40,7 +40,7 @@ public class GenreServices {
 
     public Genre getGenreByTitle(String title) {
         return genres.values().stream()
-                .filter(genre -> genre.getTitle().equals(title)).findFirst().orElse(null);
+                .filter(genre -> genre.getTitle().equalsIgnoreCase(title)).findFirst().orElse(null);
     }
 
     public HashMap<String, Genre> getGenres() {
