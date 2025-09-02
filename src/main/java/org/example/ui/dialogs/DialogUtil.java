@@ -1,5 +1,7 @@
 package org.example.ui.dialogs;
 
-public interface DialogUtil {
-    void show() throws Exception;
+import javafx.scene.control.Dialog;
+
+public interface DialogUtil<R> {
+    Dialog<R> build() throws Exception;
 }

@@ -1,7 +1,6 @@
 package org.example.genre;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import org.example.ui.dialogs.CreateEditDialog;
@@ -13,37 +12,35 @@ public class GenreController {
     @FXML TextField findGenreByTitleField;
     @FXML ListView<String> genreListView;
 
-    public void setGenreController(GenreServices genreServices) {
+    public void setupGenreController(GenreServices genreServices) {
         this.genreServices = genreServices;
-        updateGenresList();
+        refreshGenresList();
     }
 
-    public void updateGenresList() {
-        ObservableList<String> genresList = FXCollections.observableArrayList(genreServices.getGenres().values().stream().map(Genre::getTitle).toList());
-        genreListView.setItems(genresList);
+    public void refreshGenresList() {
+        genreListView.setItems(FXCollections.observableArrayList(genreServices.getGenres().values().stream().map(Genre::getTitle).toList()));
     }
 
     @FXML private void handleAddGenre() {
         String title = genreTitleField.getText();
         genreServices.createGenre(title);
-        updateGenresList();
+        refreshGenresList();
         genreTitleField.clear();
     }
 
     @FXML private void handleRemoveGenre() {
         String title = genreListView.getSelectionModel().getSelectedItem();
         genreServices.removeGenre(title);
-        updateGenresList();
+        refreshGenresList();
     }
 
     @FXML private void handleEditGenre() {
         String title = genreListView.getSelectionModel().getSelectedItem();
         if (!title.trim().isEmpty()) {
             Genre selectedGenre = genreServices.getGenreByTitle(title);
-
             try {
                 new CreateEditDialog<>("Edit Genre", "Edit Genre", "/org/example/views/edit-genre-view.fxml", selectedGenre, genreServices).show();
-                updateGenresList();
+                refreshGenresList();
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -53,13 +50,11 @@ public class GenreController {
     @FXML private void handleFindGenre() {
         String title = findGenreByTitleField.getText();
         Genre genre = genreServices.getGenreByTitle(title);
-        if (!title.trim().isEmpty() && genre != null) {
+        if (!title.trim().isEmpty() && genre != null)
+            genreListView.getItems().setAll(genre.getTitle());
+        else if (title.trim().isEmpty())
+            refreshGenresList();
+        else
             genreListView.getItems().clear();
-            genreListView.getItems().add(genre.getTitle());
-        } else if (title.trim().isEmpty()) {
-            updateGenresList();
-        } else {
-            genreListView.getItems().clear();
-        }
     }
 }

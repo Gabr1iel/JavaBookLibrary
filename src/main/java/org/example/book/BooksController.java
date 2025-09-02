@@ -33,15 +33,10 @@ public class BooksController {
         bookTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
-    public void setBookController(BookServices bookServices, GenreServices genreServices) {
+    public void setupBookController(BookServices bookServices, GenreServices genreServices) {
         this.bookServices = bookServices;
         this.genreServices = genreServices;
 
-        CreateComboBox.setupComboBox(genreComboBox, genreServices.getGenres().values(), Genre::getTitle);
-        loadBookList(); // Po nastavení knihovny rovnou načteme knihy
-    }
-
-    public void loadBookList() {
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         authorColumn.setCellValueFactory(new PropertyValueFactory<>("author"));
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("releaseDate"));
@@ -71,8 +66,13 @@ public class BooksController {
                     setText((book.isLoaned() ? "Loaned" : "Available"));
             }
         });
-
         bookTableView.setItems(FXCollections.observableArrayList(bookServices.getBooks().values()));
+        CreateComboBox.setupComboBox(genreComboBox, genreServices.getGenres().values(), Genre::getTitle);
+    }
+
+    public void refreshBooksTable() {
+        bookTableView.setItems(FXCollections.observableArrayList(bookServices.getBooks().values()));
+        bookTableView.refresh();
     }
 
     @FXML private void handleAddBook() {
@@ -83,7 +83,7 @@ public class BooksController {
 
         bookServices.createBook(title, author, publishDate, genre);
 
-        loadBookList();
+        refreshBooksTable();
         bookTitleField.clear();
         bookAuthorField.clear();
         bookPublishDateField.clear();
@@ -94,7 +94,7 @@ public class BooksController {
         Book selectedBook = bookTableView.getSelectionModel().getSelectedItem();
         if (selectedBook != null) {
             bookServices.removeBook(selectedBook);
-            loadBookList();
+            refreshBooksTable();
         }
     }
 
@@ -103,7 +103,7 @@ public class BooksController {
         if (selectedBook != null) {
             try {
                 new CreateEditDialog<>("Update Book", "Change book information", "/org/example/views/edit-book-view.fxml", selectedBook, bookServices, genreServices).show();
-                loadBookList();
+                refreshBooksTable();
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -119,7 +119,7 @@ public class BooksController {
         if (!filteredBooks.isEmpty())
             bookTableView.getItems().setAll(filteredBooks.values());
         else if(title.trim().isEmpty() && author.trim().isEmpty() && genre.trim().isEmpty())
-            loadBookList();
+            refreshBooksTable();
         else
             bookTableView.getItems().clear();
     }

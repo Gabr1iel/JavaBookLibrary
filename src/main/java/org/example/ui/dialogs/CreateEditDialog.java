@@ -8,7 +8,7 @@ import javafx.scene.control.Dialog;
 import org.example.ui.controllers.DualServiceEditController;
 import org.example.ui.controllers.EditController;
 
-public final class CreateEditDialog<M, S, T> implements DialogUtil {
+public final class CreateEditDialog<M, S, T> implements DialogUtil<M> {
     private final String title;
     private final String headerTxt;
     private final String fxmlPath;
@@ -30,7 +30,7 @@ public final class CreateEditDialog<M, S, T> implements DialogUtil {
     }
 
     @Override
-    public void show() throws Exception {
+    public Dialog<M> build() throws Exception {
         FXMLLoader loader = new FXMLLoader(CreateEditDialog.class.getResource(fxmlPath));
         Parent content = loader.load();
         EditController<M, S> controller = loader.getController();
@@ -54,7 +54,10 @@ public final class CreateEditDialog<M, S, T> implements DialogUtil {
                 controller.Edit();
             return null;
         });
+        return dialog;
+    }
 
-        dialog.showAndWait();
+    public void show() throws Exception {
+        build().showAndWait();
     }
 }

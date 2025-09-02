@@ -32,7 +32,7 @@ public class MainViewController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/views/books-view.fxml"));
             Pane view = loader.load();
             BooksController booksController = loader.getController();
-            booksController.setBookController(bookServices, genreServices);
+            booksController.setupBookController(bookServices, genreServices);
             contentPane.getChildren().setAll(view);
         } catch (IOException e) {
             e.printStackTrace();
@@ -45,7 +45,7 @@ public class MainViewController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/views/readers-view.fxml"));
             Pane view = loader.load();
             ReadersController readersController = loader.getController();
-            readersController.setReaderController(readerServices, bookServices);
+            readersController.setupReaderController(readerServices, bookServices);
             contentPane.getChildren().setAll(view);
         } catch (IOException e) {
             e.printStackTrace();
@@ -57,7 +57,7 @@ public class MainViewController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/views/genres-view.fxml"));
             Pane view = loader.load();
             GenreController genreController = loader.getController();
-            genreController.setGenreController(genreServices);
+            genreController.setupGenreController(genreServices);
             contentPane.getChildren().setAll(view);
         } catch (IOException e) {
             e.printStackTrace();

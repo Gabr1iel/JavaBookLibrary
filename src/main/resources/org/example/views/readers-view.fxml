@@ -33,7 +33,7 @@
     </TableView>
     <HBox spacing="10">
         <Button text="Loan book" onAction="#handleLoanBook"/>
-        <Button text="Edit reader" onAction="#handleUpdateReader"/>
+        <Button text="Edit reader" onAction="#handleEditReader"/>
         <Button styleClass="delete-btn" onAction="#handleRemoveReader" text="Remove"/>
     </HBox>
 </VBox>

@@ -2,10 +2,12 @@ package org.example.reader;
 
 import org.example.book.Book;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.*;
 
 public class Reader implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
     private final String Id = UUID.randomUUID().toString();
     private String name;
